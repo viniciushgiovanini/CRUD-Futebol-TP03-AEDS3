@@ -7,7 +7,7 @@
 
 ## Documentação 📜
 
-- A documentação de instruções pode ser encontrada [AQUI]()
+- A documentação de instruções pode ser encontrada [AQUI](https://github.com/viniciushgiovanini/CRUD-Futebol-TP03-AEDS3/blob/main/doc/Trabalho%20Prático%20III.pdf)
 
 - A documentação feita desse código pode ser encontrada [AQUI]()
 
