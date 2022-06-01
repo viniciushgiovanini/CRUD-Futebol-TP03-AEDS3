@@ -298,15 +298,19 @@ public class arquivocrud {
               numerodoMeio = arq.readShort();
 
               if (n == numerodoMeio) {
-
-                posicaoRetorno = arq.readLong();
+                long salvarposiDepoisdoIndice = arq.getFilePointer();
+                arq.seek(arq.getFilePointer() + 8);
                 String testelapide = arq.readUTF();
-
                 if (testelapide.equals(lapide)) {
-                  posicaoRetorno = -1;
+                  // posicaoRetorno = -1;
+                  esq--;
 
+                } else {
+                  arq.seek(salvarposiDepoisdoIndice);
+                  posicaoRetorno = arq.readLong();
+                  esq = qtdElementos + 100;
                 }
-                esq = qtdElementos + 100;
+
               } else if (n > numerodoMeio) {
 
                 esq = mid + 1;
@@ -324,7 +328,7 @@ public class arquivocrud {
           posicaoRetorno = -10;
         }
 
-      } else {
+      } else {// método de pesquisa antigo
         if (arq.length() != 0) {
 
           arq.seek(0);
@@ -755,7 +759,7 @@ public class arquivocrud {
               long longArquivoIndice = tamanhoTotalArq;
               // pegando Id do cabecalho
               arq.seek(receberProcura + 4);
-              arq.seek(0);
+              // arq.seek(0);
               Short pegarPrimeiroId = 0;
               pegarPrimeiroId = arq.readShort();
               // marcando lapide
@@ -770,9 +774,11 @@ public class arquivocrud {
               arq.seek(tamanhoTotalArq);
               long posiNOVAdoRegistro = tamanhoTotalArq;
 
-              pegarPrimeiroId++;
-              arq.seek(0);
-              arq.writeShort(pegarPrimeiroId);
+              // aqui gera um ID novo
+              // pegarPrimeiroId++;
+
+              // arq.seek(0);
+              // arq.writeShort(pegarPrimeiroId);
               short salvarIdnoIndice = pegarPrimeiroId;
 
               ft2.setIdClube(pegarPrimeiroId);
