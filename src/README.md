@@ -11,7 +11,7 @@
 
 - Arrumar o Update do Indice
 - Arrumar a pesquisa Binária
-- Testar Update delete e Realizar partida (
+- Testar Update delete e Realizar partida (  
    ->Testar agora com todos os registros alterados     
    ->Testar com o realizar partida  
    ->Testar com a lista invertida  
