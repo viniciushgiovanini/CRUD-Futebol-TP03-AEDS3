@@ -5,6 +5,7 @@
 ## Melhorias Versão [0.1]
  
  - Foi feito alteração no update e na primeira pesquisa binária para aceitar a lapide, falta fazer os teste.
+ - Testar agora com todos os registros alterados e com o realizar partida e testar tbm a lista invertida
 
 ## Próxima melhoria (Problemas) 
 
