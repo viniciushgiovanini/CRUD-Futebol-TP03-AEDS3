@@ -301,7 +301,8 @@ public class arquivocrud {
                 long salvarposiDepoisdoIndice = arq.getFilePointer();
                 arq.seek(arq.getFilePointer() + 8);
                 String testelapide = arq.readUTF();
-                if (testelapide.equals(lapide)) {// pesquisa binária feito com o novo update do tp03
+                if (testelapide.equals(lapide)) {// pesquisa binária feito com o novo update do tp03, agora é testado
+                                                 // lapide e ignora o teste da lapide
                   posicaoRetorno = -1;
                   esq--;
 
