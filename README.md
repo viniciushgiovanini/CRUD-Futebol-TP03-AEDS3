@@ -12,7 +12,10 @@
 - A documentação feita desse código pode ser encontrada [AQUI]()
 
 ## Etapas
-
+⬜️ Arrumar Update com Indice  
+⬜️ Compressão de Dados: LZW    
+⬜️ Criptografia: Escolher (Cifra de Vigenére) 
+⬜️ Documentação     
 
 ## Linguagem de Desenvolvimento
 

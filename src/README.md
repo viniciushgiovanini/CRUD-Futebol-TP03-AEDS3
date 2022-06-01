@@ -7,7 +7,14 @@
 
 ## Próxima melhoria (Problemas) 
 
+- Arrumar o Update do Indice
+
 
 ## Próximos Passos
 
+- Arrumar a pesquisa Binária
+- Testar Update delete e Realizar partida
+- Criar o LZW (compressão e descompressão)
+- Criptografar
+- Descriptografar
 
