@@ -2,22 +2,18 @@
 
 - Essa é a branch **PRINCIPAL**
 
-## Melhorias Versão [0.2]
+## Melhorias Versão [0.3]
  
- - Foi alterado o update para que ele não escreva um novo ID quando o novo registro for maior que o antigo, alterando assim a ordenação externa e a busca binária com sucesso.  
- - Foi testado o Update e a pesquisa Binária, ambos funcionando.  
- - Foi testado o Realizar Partida, funcionando.  
- - Foi testado o Delete funcional também.  
- -  Agora para evitar alguns erros o escrever so faz a inserção randomica até a primeira ordenação ser feita.
+ - Foi feito a classe criptografia, e nela ja está presente o método para criação da tabela no arquivo (Escrita), agora tem que criar o método de criptografia que vai realizar a criptografia com a tabela.    
 
 
 ## Próxima melhoria (Problemas) 
 
-- Planejar o LZW e a Criptografia.  
-- Começar um dos dois, preferência LZW.  
+  - Criar o método de criptografia.  
+  - Criar o método de descriptografia.  
 ## Próximos Passos
 
-- Criar o LZW (compressão e descompressão)
 - Criptografar
+- Criar o LZW (compressão e descompressão)
 - Descriptografar
 

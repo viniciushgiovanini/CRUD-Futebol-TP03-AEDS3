@@ -55,10 +55,14 @@ public class arquivocrud {
       if (valor == 1) {
         PrintWriter writer = new PrintWriter("src/database/futebol.db");
         PrintWriter writer2 = new PrintWriter("src/database/aindices.db");
+        PrintWriter writerCript = new PrintWriter("src/database/criptografia/tabeladeCriptografia.db");
+
         writer.print("");
         writer.close();
         writer2.print("");
         writer2.close();
+        writerCript.print("");
+        writerCript.close();
 
       }
 
@@ -133,12 +137,17 @@ public class arquivocrud {
     try {
       // verificarArquivo("dados/futebol.db");
       short idcabecalhosave = 0;
+
       indice ic = new indice();
       listainvertida li = new listainvertida();
+      criptografia crip = new criptografia();
       arq = new RandomAccessFile("src/database/futebol.db", "rw");
 
       String nomeSalvarLI = ft.getNome();
       li.setNomeLista(nomeSalvarLI);
+
+      // momento que tem que criptografar o nome
+      // crip.criarTabelanoArquivodeDados();//usado para testar criação da tabela
       long salvarPosiLI = 0;
       if (arq.length() == 0) {
         idcabecalhosave = ft.getIdClube();
