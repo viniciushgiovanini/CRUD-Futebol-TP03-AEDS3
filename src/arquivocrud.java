@@ -356,7 +356,8 @@ public class arquivocrud {
           posicaoRetorno = -10;
         }
 
-      } else {// método de pesquisa antigo
+      } else {// método de pesquisa do delete que retorna a posicao no arquivo de indice nao
+              // no de dados igual a pesquisa binaria de cima
         if (arq.length() != 0) {
 
           arq.seek(0);
@@ -650,9 +651,7 @@ public class arquivocrud {
           System.out.println("Registro não Deletado");
         }
 
-      }
-
-      else {
+      } else {
         System.out.println("Registro não Deletado !");
       }
 
@@ -860,6 +859,7 @@ public class arquivocrud {
               idc.setLapide(" ");
               idc.writeIndiceLastPosi();
               setPrecisarOrdenar(true);
+              salvarPrecisaOrdernar(1);
 
               String palavraParaAdicionarnaLista = ft2.getNome();
 
