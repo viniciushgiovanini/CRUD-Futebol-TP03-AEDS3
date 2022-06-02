@@ -5,6 +5,8 @@ public class indice {
   private long posiIndice;
   private String lapide;
 
+  private boolean podeRandomico = false;
+
   public indice() {
     lapide = " ";
     idIndice = -1;
@@ -42,6 +44,32 @@ public class indice {
 
   public void setPosiIndice(long posiIndice) {
     this.posiIndice = posiIndice;
+  }
+
+  public void setPodeRandomico(boolean podeRandomico) {
+    this.podeRandomico = podeRandomico;
+  }
+
+  public void atualizarPodeRandomico(int op) {
+
+    try {
+
+      RandomAccessFile arq = new RandomAccessFile("src/database/precisaOrdernar.db", "rw");
+      if (op == 1) {
+
+        arq.seek(arq.getFilePointer() + 1);
+        arq.writeBoolean(this.podeRandomico);
+        arq.close();
+      }
+
+      if (op == 2) {
+        arq.seek(arq.getFilePointer() + 1);
+        this.podeRandomico = arq.readBoolean();
+      }
+    } catch (Exception e) {
+      System.out.println("Erro no atualizarPodeRandomico: " + e.getCause());
+    }
+
   }
 
   // --------------------------------------
@@ -90,23 +118,32 @@ public class indice {
 
         } else {
 
-          if ((idIndice) % 2 == 1) {
-            ePar = false;
-          }
+          atualizarPodeRandomico(2);
 
-          if (!ePar) {
-            arq.seek(tamdoArq + 13);
-            arq.writeShort(idIndice);
-            arq.writeLong(posiIndice);
-            arq.writeUTF(lapide);
+          if (podeRandomico) {
+
+            if ((idIndice) % 2 == 1) {
+              ePar = false;
+            }
+
+            if (!ePar) {
+              arq.seek(tamdoArq + 13);
+              arq.writeShort(idIndice);
+              arq.writeLong(posiIndice);
+              arq.writeUTF(lapide);
+            } else {
+              arq.seek(tamdoArq - 26);
+              // System.out.println(arq.getFilePointer());
+              arq.writeShort(idIndice);
+              arq.writeLong(posiIndice);
+              arq.writeUTF(lapide);
+            }
           } else {
-            arq.seek(tamdoArq - 26);
-            // System.out.println(arq.getFilePointer());
+            arq.seek(tamdoArq);
             arq.writeShort(idIndice);
             arq.writeLong(posiIndice);
             arq.writeUTF(lapide);
           }
-
         }
       }
 

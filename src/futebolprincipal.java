@@ -148,6 +148,7 @@ public class futebolprincipal {
     Scanner entrada = new Scanner(System.in);
     arquivocrud arqcru = new arquivocrud();
     fut futebas = new fut();
+    indice ic = new indice();
 
     arqcru.salvarPrecisaOrdernar(2);
     String menuStr = "";
@@ -209,6 +210,9 @@ public class futebolprincipal {
             arqcru.deletaTudo(1, 1, 1, 1, 1, 1, 1);// Método Criado para apagar todo o arquivo
             arqcru.setPrecisarOrdenar(true);
             arqcru.salvarPrecisaOrdernar(1);
+            ic.setPodeRandomico(true);
+            ic.atualizarPodeRandomico(1);
+
             break;
 
           default:

@@ -2,20 +2,19 @@
 
 - Essa é a branch **PRINCIPAL**
 
-## Melhorias Versão [0.1]
+## Melhorias Versão [0.2]
  
- - Foi feito alteração no update e na primeira pesquisa binária para aceitar a lapide, falta fazer os teste.
+ - Foi alterado o update para que ele não escreva um novo ID quando o novo registro for maior que o antigo, alterando assim a ordenação externa e a busca binária com sucesso.  
+ - Foi testado o Update e a pesquisa Binária, ambos funcionando.  
+ - Foi testado o Realizar Partida, funcionando.  
+ - Foi testado o Delete funcional também.  
+ -  Agora para evitar alguns erros o escrever so faz a inserção randomica até a primeira ordenação ser feita.
 
 
 ## Próxima melhoria (Problemas) 
 
-- Arrumar o Update do Indice
-- Arrumar a pesquisa Binária
-- Testar Update delete e Realizar partida (  
-   ->Testar agora com todos os registros alterados     
-   ->Testar com o realizar partida  
-   ->Testar com a lista invertida  
-)
+- Planejar o LZW e a Criptografia.  
+- Começar um dos dois, preferência LZW.  
 ## Próximos Passos
 
 - Criar o LZW (compressão e descompressão)

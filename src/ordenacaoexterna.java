@@ -141,6 +141,9 @@ public class ordenacaoexterna {
       short valor1Arq1 = 0;
       short valor2Arq2 = 0;
 
+      boolean salvoudoArq1 = false;
+      boolean salvoudoArq2 = false;
+
       int testarArq1 = tamanhoArq1Inteiro - tamCaminho;
       int testarArq2 = tamanhoArq2Inteiro - tamCaminho;
       if (testarArq1 >= 0) {
@@ -183,6 +186,7 @@ public class ordenacaoexterna {
             podeLerArq1 = false;
             podeLerArq2 = true;
             contardorPonteiroArq2++;
+            salvoudoArq2 = true;
 
           } else {
             arq3.writeShort(ic.getIdIndice());
@@ -191,14 +195,45 @@ public class ordenacaoexterna {
             podeLerArq1 = true;
             podeLerArq2 = false;
             contardorPonteiroArq1++;
+            salvoudoArq1 = true;
 
           }
           contadorDeComparacoes++;
 
         }
 
-        // caso o primeiro caminho esta completo e o segundo incompleto
-        if (contardorPonteiroArq1 != tamCaminho) {
+        if (salvoudoArq1 && salvoudoArq2) {// testar caso acontece alguma intercalacao
+
+          while (contardorPonteiroArq1 < tamCaminho) {
+            ic.setIdIndice(arq1.readShort());
+            ic.setPosiIndice(arq1.readLong());
+            ic.setLapide(arq1.readUTF());
+            arq3.writeShort(ic.getIdIndice());
+            arq3.writeLong(ic.getPosiIndice());
+            arq3.writeUTF(ic.getLapide());
+            contardorPonteiroArq1++;
+          }
+          int qtdElementosArq2 = (int) arq2.length();
+          qtdElementosArq2 /= 13;
+          if (qtdElementosArq2 != 0) {
+
+            while (contardorPonteiroArq2 < qtdElementosArq2) {
+
+              arq3.writeShort(ic2.getIdIndice());
+              arq3.writeLong(ic2.getPosiIndice());
+              arq3.writeUTF(ic2.getLapide());
+              contardorPonteiroArq2++;
+              if (contardorPonteiroArq2 < qtdElementosArq2) {
+                ic2.setIdIndice(arq2.readShort());
+                ic2.setPosiIndice(arq2.readLong());
+                ic2.setLapide(arq2.readUTF());
+              }
+
+            }
+
+          }
+
+        } else if (contardorPonteiroArq1 != tamCaminho) {// caso o primeiro caminho esta completo e o segundo incompleto
           long tamArq3 = arq3.length();
           arq3.seek(tamArq3);
           int tamanhoCaminhoIncompleto1 = (int) arq1.length();
@@ -309,6 +344,9 @@ public class ordenacaoexterna {
       short valor1Arq1 = 0;
       short valor2Arq2 = 0;
 
+      boolean salvoudoArq1 = false;
+      boolean salvoudoArq2 = false;
+
       int tamanhoArq1Inteiro = (int) tamArq1;
       int tamanhoArq2Inteiro = (int) tamArq2;
       tamanhoArq1Inteiro /= 13;
@@ -359,6 +397,7 @@ public class ordenacaoexterna {
             podeLerArq1 = false;
             podeLerArq2 = true;
             contardorPonteiroArq2++;
+            salvoudoArq2 = true;
 
           } else {
             arq4.writeShort(ic.getIdIndice());
@@ -367,6 +406,7 @@ public class ordenacaoexterna {
             podeLerArq1 = true;
             podeLerArq2 = false;
             contardorPonteiroArq1++;
+            salvoudoArq1 = true;
 
           }
 
@@ -374,9 +414,38 @@ public class ordenacaoexterna {
 
         }
 
-        // caso o arquivo dois nao seja completo (imcompleto)
+        if (salvoudoArq1 && salvoudoArq2) {// testar caso acontece alguma intercalacao
 
-        if (contardorPonteiroArq1 != tamCaminho) {
+          while (contardorPonteiroArq1 < tamCaminho) {
+            ic.setIdIndice(arq1.readShort());
+            ic.setPosiIndice(arq1.readLong());
+            ic.setLapide(arq1.readUTF());
+            arq4.writeShort(ic.getIdIndice());
+            arq4.writeLong(ic.getPosiIndice());
+            arq4.writeUTF(ic.getLapide());
+            contardorPonteiroArq1++;
+          }
+          int qtdElementosArq2 = (int) arq2.length();
+          qtdElementosArq2 /= 13;
+          if (qtdElementosArq2 != 0) {
+
+            while (contardorPonteiroArq2 < qtdElementosArq2) {
+
+              arq4.writeShort(ic2.getIdIndice());
+              arq4.writeLong(ic2.getPosiIndice());
+              arq4.writeUTF(ic2.getLapide());
+              contardorPonteiroArq2++;
+              if (contardorPonteiroArq2 < qtdElementosArq2) {
+                ic2.setIdIndice(arq2.readShort());
+                ic2.setPosiIndice(arq2.readLong());
+                ic2.setLapide(arq2.readUTF());
+              }
+
+            }
+
+          }
+
+        } else if (contardorPonteiroArq1 != tamCaminho) {// caso o arquivo dois nao seja completo (imcompleto)
           long tamArq4 = arq4.length();
           arq4.seek(tamArq4);
           int tamanhoCaminhoIncompleto1 = (int) arq1.length();
@@ -495,6 +564,9 @@ public class ordenacaoexterna {
       int testarArq3 = tamanhoArq3Inteiro - tamCaminho;
       int testarArq4 = tamanhoArq4Inteiro - tamCaminho;
 
+      boolean salvoudoArq3 = false;
+      boolean salvoudoArq4 = false;
+
       if (testarArq3 >= 0) {
         podeLerArq3 = true;
       }
@@ -534,6 +606,7 @@ public class ordenacaoexterna {
             podeLerArq3 = false;
             podeLerArq4 = true;
             contardorPonteiroArq4++;
+            salvoudoArq4 = true;
 
           } else {
             arq1.writeShort(ic.getIdIndice());
@@ -542,13 +615,48 @@ public class ordenacaoexterna {
             podeLerArq3 = true;
             podeLerArq4 = false;
             contardorPonteiroArq3++;
+            salvoudoArq3 = true;
 
           }
           contadorDeComparacoes++;
 
         }
-        // caso o arquivo 3 esteja completo e o arquivo 4 esteja incompleto
-        if (contardorPonteiroArq3 != tamCaminho) {
+
+        // caso arq3 esteja completo mas nao leia tudo pois intercalou
+
+        if (salvoudoArq3 && salvoudoArq4) {
+
+          while (contardorPonteiroArq3 < tamCaminho) {
+            ic.setIdIndice(arq3.readShort());
+            ic.setPosiIndice(arq3.readLong());
+            ic.setLapide(arq3.readUTF());
+            arq1.writeShort(ic.getIdIndice());
+            arq1.writeLong(ic.getPosiIndice());
+            arq1.writeUTF(ic.getLapide());
+            contardorPonteiroArq3++;
+          }
+          int qtdElementosArq4 = (int) arq4.length();
+          qtdElementosArq4 /= 13;
+          if (qtdElementosArq4 != 0) {
+
+            while (contardorPonteiroArq4 < qtdElementosArq4) {
+
+              arq1.writeShort(ic2.getIdIndice());
+              arq1.writeLong(ic2.getPosiIndice());
+              arq1.writeUTF(ic2.getLapide());
+              contardorPonteiroArq4++;
+              if (contardorPonteiroArq4 < qtdElementosArq4) {
+                ic2.setIdIndice(arq4.readShort());
+                ic2.setPosiIndice(arq4.readLong());
+                ic2.setLapide(arq4.readUTF());
+              }
+
+            }
+
+          }
+
+        } else if (contardorPonteiroArq3 != tamCaminho) {// caso o arquivo 3 esteja completo e o arquivo 4 esteja
+                                                         // incompleto
           long tamArq1 = arq1.length();
           arq1.seek(tamArq1);
           int tamanhoCaminhoIncompleto3 = (int) arq3.length();
@@ -584,7 +692,7 @@ public class ordenacaoexterna {
           int tamanhoCaminhoIncompleto4 = (int) arq4.length();
           tamanhoCaminhoIncompleto4 /= 13;
 
-          if (tamanhoCaminhoIncompleto4 > tamCaminho) {
+          if (contardorPonteiroArq3 + contardorPonteiroArq4 > tamCaminho) {
 
             if (tamanhoCaminhoIncompleto4 != tamCaminho
                 && (tamanhoCaminhoIncompleto4 < (tamCaminho * contadorPRINCIPAL))) {
@@ -661,6 +769,9 @@ public class ordenacaoexterna {
       short valor1Arq3 = 0;
       short valor2Arq4 = 0;
 
+      boolean salvoudoArq3 = false;
+      boolean salvoudoArq4 = false;
+
       int tamanhoArq3Inteiro = (int) tamArq3;
       int tamanhoArq4Inteiro = (int) tamArq4;
       tamanhoArq3Inteiro /= 13;
@@ -709,6 +820,7 @@ public class ordenacaoexterna {
             podeLerArq3 = false;
             podeLerArq4 = true;
             contardorPonteiroArq4++;
+            salvoudoArq4 = true;
 
           } else {
             arq2.writeShort(ic.getIdIndice());
@@ -717,15 +829,47 @@ public class ordenacaoexterna {
             podeLerArq3 = true;
             podeLerArq4 = false;
             contardorPonteiroArq3++;
+            salvoudoArq3 = true;
 
           }
 
           contadorDeComparacoes++;
 
         }
-        // caso agora o arquivo 4 nao esteja completo e o 3 sim
 
-        if (contardorPonteiroArq3 != tamCaminho) {// caso1
+        if (salvoudoArq3 && salvoudoArq4) {
+
+          while (contardorPonteiroArq3 < tamCaminho) {
+            ic.setIdIndice(arq3.readShort());
+            ic.setPosiIndice(arq3.readLong());
+            ic.setLapide(arq3.readUTF());
+            arq2.writeShort(ic.getIdIndice());
+            arq2.writeLong(ic.getPosiIndice());
+            arq2.writeUTF(ic.getLapide());
+            contardorPonteiroArq3++;
+          }
+          int qtdElementosArq4 = (int) arq4.length();
+          qtdElementosArq4 /= 13;
+          if (qtdElementosArq4 != 0) {
+
+            while (contardorPonteiroArq4 < qtdElementosArq4) {
+
+              arq2.writeShort(ic2.getIdIndice());
+              arq2.writeLong(ic2.getPosiIndice());
+              arq2.writeUTF(ic2.getLapide());
+              contardorPonteiroArq4++;
+              if (contardorPonteiroArq4 < qtdElementosArq4) {
+                ic2.setIdIndice(arq4.readShort());
+                ic2.setPosiIndice(arq4.readLong());
+                ic2.setLapide(arq4.readUTF());
+              }
+
+            }
+
+          }
+
+        } else if (contardorPonteiroArq3 != tamCaminho) {// caso agora o arquivo 4 nao esteja completo e o 3 sim
+          // caso1
           long tamArq2 = arq2.length();
           int qtdElementosarq2 = (int) tamArq2 / 13;
 

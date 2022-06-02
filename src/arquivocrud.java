@@ -11,7 +11,7 @@ public class arquivocrud {
     return precisaOrdernar;
   }
 
-  public void setPrecisarOrdenar(boolean precisaOrdernar) {// ARRUMAR AQUI DEPOISSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+  public void setPrecisarOrdenar(boolean precisaOrdernar) {
     this.precisaOrdernar = precisaOrdernar;
   }
 
@@ -31,6 +31,7 @@ public class arquivocrud {
       if (op == 1) {
         arq.seek(0);
         arq.writeBoolean(precisaOrdernar);
+
       } else {
         if (op == 2) {
           arq.seek(0);
@@ -187,6 +188,7 @@ public class arquivocrud {
 
     }
     setPrecisarOrdenar(true);
+    salvarPrecisaOrdernar(1);
     System.out.println("------X------");
     System.out.println(ft.toString());
 
@@ -288,10 +290,34 @@ public class arquivocrud {
           int mid = (esq + dir) / 2;
           arq.seek(0);
 
-          while (esq <= dir) {
-            mid = (esq + dir) / 2;
+          boolean deuLapide = false;
+          int contadordeuLapide = 0;
 
-            arq.seek(((mid) * 13) - 13);
+          while (esq <= dir) {
+
+            if (!deuLapide) {
+              mid = (esq + dir) / 2;
+            }
+
+            if (mid >= 1 && !deuLapide) {
+              arq.seek(((mid) * 13) - 13);
+            } else if (deuLapide) {
+
+              if (contadordeuLapide == 0) {
+                arq.seek(((mid + 1) * 13) - 13);
+              } else if (contadordeuLapide == 1) {
+                arq.seek(((mid - 1) * 13) - 13);
+              } else {
+                esq = dir + 10;
+                posicaoRetorno = -1;
+              }
+
+              contadordeuLapide++;
+
+            } else {
+              esq = dir + 10;
+              posicaoRetorno = -1;
+            }
 
             if (arq.getFilePointer() < arq.length()) {
 
@@ -304,12 +330,13 @@ public class arquivocrud {
                 if (testelapide.equals(lapide)) {// pesquisa binária feito com o novo update do tp03, agora é testado
                                                  // lapide e ignora o teste da lapide
                   posicaoRetorno = -1;
-                  esq--;
+                  deuLapide = true;
 
                 } else {
                   arq.seek(salvarposiDepoisdoIndice);
                   posicaoRetorno = arq.readLong();
                   esq = qtdElementos + 100;
+
                 }
 
               } else if (n > numerodoMeio) {
@@ -343,10 +370,34 @@ public class arquivocrud {
           int mid = (esq + dir) / 2;
           arq.seek(0);
 
-          while (esq <= dir) {
-            mid = (esq + dir) / 2;
+          boolean deuLapide = false;
+          int contadordeuLapide = 0;
 
-            arq.seek(((mid) * 13) - 13);
+          while (esq <= dir) {
+
+            if (!deuLapide) {
+              mid = (esq + dir) / 2;
+            }
+
+            if (mid >= 1 && !deuLapide) {
+              arq.seek(((mid) * 13) - 13);
+            } else if (deuLapide) {
+
+              if (contadordeuLapide == 0) {
+                arq.seek(((mid + 1) * 13) - 13);
+              } else if (contadordeuLapide == 1) {
+                arq.seek(((mid - 1) * 13) - 13);
+              } else {
+                esq = dir + 10;
+                posicaoRetorno = -1;
+              }
+
+              contadordeuLapide++;
+
+            } else {
+              esq = dir + 10;
+              posicaoRetorno = -1;
+            }
             if (arq.getFilePointer() < arq.length()) {
               int numerodoMeio = arq.readShort();
               if (n == numerodoMeio) {
@@ -355,7 +406,7 @@ public class arquivocrud {
 
                 if (testelapide.equals(lapide)) {
                   posicaoRetorno = -1;
-                  // dir = mid - 1;
+                  deuLapide = true;
                 }
                 esq = qtdElementos + 1;
 
@@ -388,7 +439,8 @@ public class arquivocrud {
         return -10;
       }
     }
-
+    setPrecisarOrdenar(false);
+    salvarPrecisaOrdernar(1);
     return posicaoRetorno;
     // pesquisa para retornar a posicao do id procurado no arquivo de indice
 
@@ -410,8 +462,9 @@ public class arquivocrud {
     long retornoPesquisa = -1;
     boolean idOrnot = recebendo.matches("-?\\d+");
     String lapide = "*";
-
+    salvarPrecisaOrdernar(2);
     ordenacaoexterna oe = new ordenacaoexterna();
+    indice ic = new indice();
 
     if (idOrnot == true) {// Inicio Pesquisa Númerica
 
@@ -465,6 +518,8 @@ public class arquivocrud {
 
         }
       }
+      ic.setPodeRandomico(false);
+      ic.atualizarPodeRandomico(1);
       setPrecisarOrdenar(false);
     } else {// aqui é quando se faz a pesquisa por nome ou cidade do clube
 
@@ -583,11 +638,11 @@ public class arquivocrud {
           // mandar para o delete lista invertida, mandar
           boolean deleteAI = arquivoDeleteNaListaInvertida(ft2.getNome(), idExist);
           boolean deleteAI2 = false;
-          if ((!ft2.getNome().equals(""))) {
+          if ((!ft2.getCidade().equals(""))) {
             deleteAI2 = arquivoDeleteNaListaInvertida(ft2.getCidade(), idExist);
           }
 
-          if (deleteAI && deleteAI2) {
+          if (deleteAI || deleteAI2) {
             arquivoDeletado = true;
           }
 
