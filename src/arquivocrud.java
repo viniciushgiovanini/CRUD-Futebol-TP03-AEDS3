@@ -114,6 +114,7 @@ public class arquivocrud {
     }
 
   }
+
   // ----------------------------------------X----------------------------------------//
 
   // --------------------------------------
@@ -147,7 +148,8 @@ public class arquivocrud {
       li.setNomeLista(nomeSalvarLI);
 
       // momento que tem que criptografar o nome
-      // crip.criarTabelanoArquivodeDados();//usado para testar criação da tabela
+      // crip.criarTabelanoArquivodeDados();// usado para testar criação da tabela
+      crip.criptografar(nomeSalvarLI);
       long salvarPosiLI = 0;
       if (arq.length() == 0) {
         idcabecalhosave = ft.getIdClube();
