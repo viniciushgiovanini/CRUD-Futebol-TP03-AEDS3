@@ -2,9 +2,9 @@
 
 - Essa é a branch **PRINCIPAL**
 
-## Melhorias Versão [0.3]
+## Melhorias Versão [0.3.1]
  
-- Foi feito a classe criptografia, e nela ja está presente o método para criação da tabela no arquivo (Escrita), agora tem que criar o método de criptografia que vai realizar a criptografia com a tabela.    
+- Foi criado o método de criptografia, mas está incompleto, ele já inicialmente regula o tamanho da chave para ter o tamanho da entrada a ser criptografada  
 
 
 ## Próxima melhoria (Problemas) 
