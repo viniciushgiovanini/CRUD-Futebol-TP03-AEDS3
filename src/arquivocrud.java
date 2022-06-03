@@ -55,7 +55,11 @@ public class arquivocrud {
       if (valor == 1) {
         PrintWriter writer = new PrintWriter("src/database/futebol.db");
         PrintWriter writer2 = new PrintWriter("src/database/aindices.db");
-        PrintWriter writerCript = new PrintWriter("src/database/criptografia/tabeladeCriptografia.db");
+        PrintWriter writerCript = new PrintWriter("src/database/criptografia/tabeladeCriptografia.db");// DELETAR DPS
+                                                                                                       // QUE
+                                                                                                       // CRIPTOGRAFIA
+                                                                                                       // ESTIVER
+                                                                                                       // COMPLETA
 
         writer.print("");
         writer.close();
@@ -145,11 +149,13 @@ public class arquivocrud {
       arq = new RandomAccessFile("src/database/futebol.db", "rw");
 
       String nomeSalvarLI = ft.getNome();
+      ft.setNome(crip.criptografar(nomeSalvarLI));
+      nomeSalvarLI = ft.getNome();
       li.setNomeLista(nomeSalvarLI);
 
       // momento que tem que criptografar o nome
       // crip.criarTabelanoArquivodeDados();// usado para testar criação da tabela
-      crip.criptografar(nomeSalvarLI);
+
       long salvarPosiLI = 0;
       if (arq.length() == 0) {
         idcabecalhosave = ft.getIdClube();
@@ -217,7 +223,8 @@ public class arquivocrud {
     String cnpjparaveri = null;
 
     System.out.print("Escreva o nome do clube: ");
-    ft.setNome(entrada.nextLine());
+    String setarNome = entrada.nextLine().toLowerCase();
+    ft.setNome(setarNome);
 
     if (!(ft.getNome().equals(""))) {
 

@@ -43,7 +43,7 @@ public class criptografia {
 
       RandomAccessFile arq = new RandomAccessFile("src/database/criptografia/tabeladeCriptografia.db", "rw");
 
-      for (int i = 0; i < 26; i++) {
+      for (int i = 0; i < 26; i++) {// Loop tem que ser até 26
 
         arq.writeChar(letraIndice++);
         a = toByteArray(primeiroVetor);
@@ -57,24 +57,6 @@ public class criptografia {
       System.out.println("Erro no criarTabelanoArquivodeDados: " + e.getMessage());
     }
 
-  }
-
-  private int retornarPosicaodaLetranoAlfabeto(char letra) {
-    char alfabeto[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-    int valorRetorno = -1;
-
-    for (int i = 0; i < 26; i++) {
-
-      if (letra == alfabeto[i]) {
-
-        valorRetorno = i;
-        i = 200;
-
-      }
-
-    }
-    return valorRetorno;
   }
 
   private String regularTamanhodaChave(String preRegular, int tamMenor, int op) {
@@ -118,9 +100,65 @@ public class criptografia {
 
   }
 
-  public void criptografar(String entrada) {
+  private int retornarPosicaodaLetranoAlfabeto(char letra) {
+    char alfabeto[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+    int valorRetorno = -1;
 
-    String chave = "aeds";
+    for (int i = 0; i < 26; i++) {
+
+      if (letra == alfabeto[i]) {
+
+        valorRetorno = i;
+        i = 200;
+
+      }
+
+    }
+    return valorRetorno;
+  }
+
+  private char retornarLetranaTabelaVigenere(char letra, int posi) {
+    char letraRetorno = ' ';
+
+    posi += 1;
+
+    try {
+      RandomAccessFile arq = new RandomAccessFile("src/database/criptografia/tabeladeCriptografia.db", "rw");
+
+      arq.seek(0);
+      boolean contador = true;
+      char letraIndice = ' ';
+      while (contador && (arq.getFilePointer() < arq.length())) {
+
+        letraIndice = arq.readChar();
+
+        if (letraIndice == letra) {
+
+          contador = false;
+
+          arq.seek(arq.getFilePointer() + ((posi * 2) - 2));
+
+          letraRetorno = arq.readChar();
+
+        }
+
+        arq.seek(arq.getFilePointer() + 52);
+
+      }
+
+      arq.close();
+    } catch (Exception e) {
+      System.out.println("Erro no retornarLetranaTabelaVigenere: " + e.getMessage());
+    }
+    return letraRetorno;
+  }
+
+  public String criptografar(String entrada) {
+
+    String chave = "AEDS";
+    String criptografada = "";
+    entrada = entrada.toUpperCase();
 
     try {
       RandomAccessFile arq = new RandomAccessFile("src/database/criptografia/tabeladeCriptografia.db", "rw");
@@ -129,6 +167,7 @@ public class criptografia {
 
         criarTabelanoArquivodeDados();
       }
+
       // primeira coisa é fazer a chave ficar do tamanho da entrada
       int tamChave = chave.length();
       int tamEntrada = entrada.length();
@@ -136,22 +175,43 @@ public class criptografia {
 
       } else if (tamChave > tamEntrada) {
 
-        regularTamanhodaChave(chave, tamEntrada, 1);
+        chave = regularTamanhodaChave(chave, tamEntrada, 1);
 
       } else if (tamEntrada > tamChave) {
 
-        regularTamanhodaChave(chave, tamEntrada, 2);
+        chave = regularTamanhodaChave(chave, tamEntrada, 2);
       }
       // parte acima faz a regulagem da chave para o tamanho da entrada
 
       // agora tem que fazer a pesquisa na tabela
       // fazer a pesquisa na tabela
 
+      for (int i = 0; i < entrada.length(); i++) {
+
+        char letraEntrada = entrada.charAt(i);
+        char letraChave = chave.charAt(i);
+
+        int posicaodaLetraChave = retornarPosicaodaLetranoAlfabeto(letraChave);
+
+        char letraParaCripto = retornarLetranaTabelaVigenere(letraEntrada, posicaodaLetraChave);
+
+        if (letraParaCripto != ' ') {
+          criptografada += letraParaCripto;
+        } else {
+          criptografada += '8';
+        }
+
+      }
+
       arq.close();
     } catch (Exception e) {
       System.out.println("Erro no criptografar: " + e.getMessage());
     }
-
+    return criptografada;
   }
+
+  // public String descriptografar(String entrada) {
+
+  // }
 
 }
