@@ -58,6 +58,11 @@ public class listainvertida {
           ft.setLapide(lerLapide);
 
           String nome = arq.readUTF();
+
+          criptografia crip = new criptografia();
+
+          nome = crip.descriptografar(nome);
+          nome = ft.tratarNome(nome);
           ft.setNome(nome);
 
           String cnpj = arq.readUTF();
@@ -172,6 +177,7 @@ public class listainvertida {
 
               pegarOsIndices = arq.readLong();
             }
+
           }
           marcador = false;
           sairdoLoopPrincipal = false;

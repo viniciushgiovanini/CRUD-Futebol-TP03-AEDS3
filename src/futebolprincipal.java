@@ -35,8 +35,8 @@ public class futebolprincipal {
       if (retornoTimeUm >= 0) {
         long retornoTimeDois = arq.procurarClube(timeDois, time2, 0);
 
-        System.out.println(time1.toString());
-        System.out.println(time2.toString());
+        time1.printarNaTela();
+        time2.printarNaTela();
 
         String confirmartimes;
         System.out.println("Confirma que esses são os times que deseja realizar uma partida ? (sim ou nao)");
@@ -103,9 +103,9 @@ public class futebolprincipal {
       System.out.println("Realização de Partida Concluida !");
 
       System.out.println("------------------X------------------");
-      System.out.println(time1.toString());
+      time1.printarNaTela();
       System.out.println("------------------X------------------");
-      System.out.println(time2.toString());
+      time2.printarNaTela();
       System.out.println("------------------X------------------");
 
     } else {

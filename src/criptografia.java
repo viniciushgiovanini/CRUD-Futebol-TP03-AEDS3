@@ -2,6 +2,8 @@ import java.io.*;
 
 public class criptografia {
 
+  private String chave = "AEDS";
+
   private byte[] toByteArray(char a[]) throws IOException {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     DataOutputStream dos = new DataOutputStream(baos);
@@ -119,7 +121,7 @@ public class criptografia {
   }
 
   private char retornarLetranaTabelaVigenere(char letra, int posi) {
-    char letraRetorno = ' ';
+    char letraRetorno = '-';
 
     posi += 1;
 
@@ -156,9 +158,9 @@ public class criptografia {
 
   public String criptografar(String entrada) {
 
-    String chave = "AEDS";
     String criptografada = "";
     entrada = entrada.toUpperCase();
+    boolean temCaracterEspecial = false;
 
     try {
       RandomAccessFile arq = new RandomAccessFile("src/database/criptografia/tabeladeCriptografia.db", "rw");
@@ -171,15 +173,16 @@ public class criptografia {
       // primeira coisa é fazer a chave ficar do tamanho da entrada
       int tamChave = chave.length();
       int tamEntrada = entrada.length();
+      String chaveCrip = "";
       if (tamChave == tamEntrada) {
 
       } else if (tamChave > tamEntrada) {
 
-        chave = regularTamanhodaChave(chave, tamEntrada, 1);
+        chaveCrip = regularTamanhodaChave(chave, tamEntrada, 1);
 
       } else if (tamEntrada > tamChave) {
 
-        chave = regularTamanhodaChave(chave, tamEntrada, 2);
+        chaveCrip = regularTamanhodaChave(chave, tamEntrada, 2);
       }
       // parte acima faz a regulagem da chave para o tamanho da entrada
 
@@ -189,16 +192,17 @@ public class criptografia {
       for (int i = 0; i < entrada.length(); i++) {
 
         char letraEntrada = entrada.charAt(i);
-        char letraChave = chave.charAt(i);
+        char letraChave = chaveCrip.charAt(i);
 
         int posicaodaLetraChave = retornarPosicaodaLetranoAlfabeto(letraChave);
 
         char letraParaCripto = retornarLetranaTabelaVigenere(letraEntrada, posicaodaLetraChave);
 
-        if (letraParaCripto != ' ') {
+        if (letraParaCripto != '-') {
           criptografada += letraParaCripto;
         } else {
-          criptografada += '8';
+          temCaracterEspecial = true;
+          i = 3000;
         }
 
       }
@@ -207,11 +211,106 @@ public class criptografia {
     } catch (Exception e) {
       System.out.println("Erro no criptografar: " + e.getMessage());
     }
+
+    if (temCaracterEspecial) {
+      criptografada = entrada.toLowerCase();
+    }
+
     return criptografada;
   }
 
-  // public String descriptografar(String entrada) {
+  private char retornarLetraDescriptografada(char letra, int posiChave) {
+    char letraRetorno = ' ';
+    posiChave += 2;
+    boolean contador = true;
+    char letraIndice = ' ';
+    try {
+      RandomAccessFile arq = new RandomAccessFile("src/database/criptografia/tabeladeCriptografia.db", "rw");
 
-  // }
+      arq.seek(arq.getFilePointer() + ((posiChave * 2) - 2));
 
+      while (contador && (arq.getFilePointer() < arq.length())) {
+
+        letraIndice = arq.readChar();
+        if (letra == letraIndice) {
+          long salvarPosi = arq.getFilePointer();
+
+          arq.seek((arq.getFilePointer() - (posiChave * 2)));
+
+          letraRetorno = arq.readChar();
+          arq.seek(salvarPosi);
+          contador = false;
+        }
+
+        arq.seek(arq.getFilePointer() + 52);
+
+      }
+      arq.close();
+    } catch (Exception e) {
+      System.out.println("Error no retornarLetraDescriptografada: " + e.getMessage());
+    }
+
+    return letraRetorno;
+  }
+
+  public String descriptografar(String entrada) {
+    String Descriptografada = "";
+    entrada = entrada.toUpperCase();
+    boolean temCaracterEspecial = false;
+
+    try {
+      RandomAccessFile arq = new RandomAccessFile("src/database/criptografia/tabeladeCriptografia.db", "rw");
+
+      if (arq.length() == 0) {
+
+        criarTabelanoArquivodeDados();
+      }
+
+      // primeira coisa é fazer a chave ficar do tamanho da entrada
+      int tamChave = chave.length();
+      int tamEntrada = entrada.length();
+      String chaveDescrip = "";
+
+      if (tamChave == tamEntrada) {
+
+      } else if (tamChave > tamEntrada) {
+
+        chaveDescrip = regularTamanhodaChave(chave, tamEntrada, 1);
+
+      } else if (tamEntrada > tamChave) {
+
+        chaveDescrip = regularTamanhodaChave(chave, tamEntrada, 2);
+      }
+      // parte acima faz a regulagem da chave para o tamanho da entrada
+
+      // agora tem que fazer a pesquisa na tabela
+      // fazer a pesquisa na tabela
+
+      for (int i = 0; i < entrada.length(); i++) {
+        char letraEntrada = entrada.charAt(i);
+        char letraChave = chaveDescrip.charAt(i);
+
+        int posicaodaLetraChave = retornarPosicaodaLetranoAlfabeto(letraChave);
+
+        char letraParaCripto = retornarLetraDescriptografada(letraEntrada, posicaodaLetraChave);
+
+        if (letraParaCripto != ' ') {
+          Descriptografada += letraParaCripto;
+        } else {
+          temCaracterEspecial = true;
+          i = 3000;
+        }
+
+      }
+
+      if (temCaracterEspecial) {
+        Descriptografada = "";
+      }
+
+      arq.close();
+    } catch (Exception e) {
+      System.out.println("Erro no descriptografar: " + e.getMessage());
+    }
+    return Descriptografada;
+  }
 }

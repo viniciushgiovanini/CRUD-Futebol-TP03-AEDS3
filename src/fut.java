@@ -72,6 +72,8 @@ public class fut {
 
   public void setCidade(String cidade) {
 
+    cidade = tratarNome(cidade);
+
     this.cidade = cidade;
   }
 
@@ -214,15 +216,94 @@ public class fut {
     boolean idOrnot = entrada.matches("-?\\d+");
 
     if (existeClube >= 0 && idOrnot) {
-      System.out.println(toString());
+      printarNaTela();
     }
 
+  }
+
+  public String tratarNome(String entrada) {
+    String retornarMaisc = "";
+    String retornarMinusc = "";
+    String primeiraLetra = "";
+    String demaisLetra = "";
+    String nome = entrada;
+
+    for (int i = 0; i < nome.length(); i++) {
+
+      char letra = nome.charAt(i);
+
+      if (i == 0) {
+
+        if (letra == ' ') {
+          i++;
+          letra = nome.charAt(i);
+
+          primeiraLetra += letra;
+          primeiraLetra += primeiraLetra.toUpperCase();
+          retornarMaisc = primeiraLetra;
+          primeiraLetra = "";
+          i++;
+
+        } else {
+          primeiraLetra += letra;
+          retornarMaisc += primeiraLetra.toUpperCase();
+        }
+
+      } else {
+
+        if (letra == ' ') {
+          i++;
+          letra = nome.charAt(i);
+          String demaisLetra2 = "";
+          demaisLetra2 += letra;
+          demaisLetra += ' ';
+          demaisLetra += demaisLetra2.toUpperCase();
+          retornarMinusc += demaisLetra;
+          demaisLetra = "";
+
+        } else {
+          demaisLetra += letra;
+          retornarMinusc += demaisLetra.toLowerCase();
+          demaisLetra = "";
+        }
+
+      }
+
+    }
+
+    retornarMaisc += retornarMinusc;
+    return retornarMaisc;
   }
 
   // --------------------------------------
   // Método de Impressao
   // --------------------------------------
+
+  public void printarNaTela() {
+
+    criptografia crip = new criptografia();
+
+    String nomeDescrip = crip.descriptografar(getNome());
+    String tratarCidade = "";
+    if (!(nomeDescrip.equals(""))) {
+      nomeDescrip = tratarNome(nomeDescrip);
+
+      tratarCidade = tratarNome(getCidade());
+      setCidade(tratarCidade);
+      setNome(nomeDescrip);
+      System.out.println(toString());
+    } else {
+      nomeDescrip = tratarNome(getNome());
+      tratarCidade = tratarNome(getCidade());
+      setCidade(tratarCidade);
+      setNome(nomeDescrip);
+      System.out.println(toString());
+    }
+
+  }
+
   public String toString() {
+
     return "\n" + "ID do Clube: " + getIdClube() + "\n" + "Nome do Clube: " + getNome() + "\n" + "CNPJ: "
         + getCnpj()
         + "\n" + "CIDADE do Clube: " + getCidade() + "\n" + "QTD de Partidas Jogadas: " + getPartidasJogadas() + "\n"

@@ -138,6 +138,7 @@ public class arquivocrud {
     RandomAccessFile arq;
     byte[] ba;
     long posiIndice = 0;
+    criptografia crip = new criptografia();
 
     try {
       // verificarArquivo("dados/futebol.db");
@@ -145,11 +146,12 @@ public class arquivocrud {
 
       indice ic = new indice();
       listainvertida li = new listainvertida();
-      criptografia crip = new criptografia();
+
       arq = new RandomAccessFile("src/database/futebol.db", "rw");
 
       String nomeSalvarLI = ft.getNome();
-      ft.setNome(crip.criptografar(nomeSalvarLI));
+      String nomeCriptografado = crip.criptografar(nomeSalvarLI);
+      ft.setNome(nomeCriptografado);
       nomeSalvarLI = ft.getNome();
       li.setNomeLista(nomeSalvarLI);
 
@@ -204,10 +206,12 @@ public class arquivocrud {
       }
 
     }
+    // System.out.println(ft.getNome());
     setPrecisarOrdenar(true);
     salvarPrecisaOrdernar(1);
+
     System.out.println("------X------");
-    System.out.println(ft.toString());
+    ft.printarNaTela();
 
   }
 
@@ -223,7 +227,7 @@ public class arquivocrud {
     String cnpjparaveri = null;
 
     System.out.print("Escreva o nome do clube: ");
-    String setarNome = entrada.nextLine().toLowerCase();
+    String setarNome = entrada.nextLine().toUpperCase();
     ft.setNome(setarNome);
 
     if (!(ft.getNome().equals(""))) {
@@ -483,7 +487,10 @@ public class arquivocrud {
     String lapide = "*";
     salvarPrecisaOrdernar(2);
     ordenacaoexterna oe = new ordenacaoexterna();
+    criptografia crip = new criptografia();
     indice ic = new indice();
+
+    recebendo = recebendo.toUpperCase();
 
     if (idOrnot == true) {// Inicio Pesquisa Númerica
 
@@ -544,8 +551,16 @@ public class arquivocrud {
 
       if (metodo != 5 && metodo != 4) {
 
+        String mandarTextoCripto = crip.criptografar(recebendo);
+
         listainvertida li = new listainvertida();
-        retornoPesquisa = li.pesquisaListaInvertida(recebendo, true);
+
+        retornoPesquisa = li.pesquisaListaInvertida(mandarTextoCripto, true);
+
+        if (retornoPesquisa == -1) {
+          retornoPesquisa = li.pesquisaListaInvertida(ft2.tratarNome(recebendo), true);
+        }
+
         if (retornoPesquisa == -1) {
 
           System.out.println("\nRegistro Pesquisado não encontrado !\n");
@@ -629,6 +644,7 @@ public class arquivocrud {
     RandomAccessFile arqIndice;
     String lapide = "";
     boolean arquivoDeletado = false;
+    criptografia crip = new criptografia();
     try {
       arqP = new RandomAccessFile("src/database/futebol.db", "rw");
       arqIndice = new RandomAccessFile("src/database/aindices.db", "rw");
@@ -637,7 +653,7 @@ public class arquivocrud {
 
       if (idExist >= 0) {
 
-        System.out.println(ft2.toString());
+        ft2.printarNaTela();
 
         System.out.println("Você deseja deletar esse registro ?");
         String ultVeri = verificarultimoDelete.nextLine();
@@ -655,7 +671,8 @@ public class arquivocrud {
           arqIndice.writeUTF(lapide);
 
           // mandar para o delete lista invertida, mandar
-          boolean deleteAI = arquivoDeleteNaListaInvertida(ft2.getNome(), idExist);
+          String criptografrar = crip.criptografar(ft2.getNome());
+          boolean deleteAI = arquivoDeleteNaListaInvertida(criptografrar, idExist);
           boolean deleteAI2 = false;
           if ((!ft2.getCidade().equals(""))) {
             deleteAI2 = arquivoDeleteNaListaInvertida(ft2.getCidade(), idExist);
@@ -764,6 +781,7 @@ public class arquivocrud {
 
     RandomAccessFile arq;
     RandomAccessFile arqIndi;
+    criptografia crip = new criptografia();
 
     if (tipoDeUpdate.equals("Completo")) {
       fut ft2 = new fut();
@@ -775,8 +793,8 @@ public class arquivocrud {
       if (receberProcura >= 0) {
 
         System.out.println("Você deseja Atualizar o Registro abaixo ?");
-        System.out.println(ft2.toString());
-        String salvarFt2nomeAntigop = ft2.getNome();
+        ft2.printarNaTela();
+        String salvarFt2nomeAntigop = crip.criptografar(ft2.getNome());
         String salvarFt2cidadeAntigop = ft2.getCidade();
         System.out.print("Inserir Resposta (SIM OU NAO): ");
         stgConfirma = entradaUpdate.nextLine();
@@ -790,7 +808,9 @@ public class arquivocrud {
             int tamanhoArquivoVelho = arq.readInt();
 
             System.out.print("Atualize o nome do Clube: ");
-            ft2.setNome(entradaUpdate.nextLine());
+            String receberParaCriptografar = entradaUpdate.nextLine();
+            receberParaCriptografar = crip.criptografar(receberParaCriptografar);
+            ft2.setNome(receberParaCriptografar);
             System.out.println();
             System.out.print("Atualize o CNPJ do Clube: ");
             ft2.setCnpj(entradaUpdate.nextLine());
@@ -894,7 +914,7 @@ public class arquivocrud {
             }
             System.out.println("----------X----------\n");
             System.out.println("Novo registro agora ficou assim: ");
-            System.out.println(ft2.toString());
+            ft2.printarNaTela();
 
           } catch (Exception e) {
             System.out.println("Aconteceu um ERROR: " + e.getMessage());
