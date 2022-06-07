@@ -139,6 +139,7 @@ public class arquivocrud {
     byte[] ba;
     long posiIndice = 0;
     criptografia crip = new criptografia();
+    String nomeCriptografado = "";
 
     try {
       // verificarArquivo("dados/futebol.db");
@@ -150,13 +151,10 @@ public class arquivocrud {
       arq = new RandomAccessFile("src/database/futebol.db", "rw");
 
       String nomeSalvarLI = ft.getNome();
-      String nomeCriptografado = crip.criptografar(nomeSalvarLI);
+      nomeCriptografado = crip.criptografar(nomeSalvarLI);// momento que tem que criptografar o nome
       ft.setNome(nomeCriptografado);
       nomeSalvarLI = ft.getNome();
       li.setNomeLista(nomeSalvarLI);
-
-      // momento que tem que criptografar o nome
-      // crip.criarTabelanoArquivodeDados();// usado para testar criação da tabela
 
       long salvarPosiLI = 0;
       if (arq.length() == 0) {
@@ -210,6 +208,8 @@ public class arquivocrud {
     setPrecisarOrdenar(true);
     salvarPrecisaOrdernar(1);
 
+    System.out.println("------X------\n");
+    System.out.println("Nome do clube Criptografado: " + nomeCriptografado + "\n");
     System.out.println("------X------");
     ft.printarNaTela();
 
@@ -557,9 +557,9 @@ public class arquivocrud {
 
         retornoPesquisa = li.pesquisaListaInvertida(mandarTextoCripto, true);
 
-        if (retornoPesquisa == -1) {
-          retornoPesquisa = li.pesquisaListaInvertida(ft2.tratarNome(recebendo), true);
-        }
+        // if (retornoPesquisa == -1) {
+        // retornoPesquisa = li.pesquisaListaInvertida(ft2.tratarNome(recebendo), true);
+        // }
 
         if (retornoPesquisa == -1) {
 

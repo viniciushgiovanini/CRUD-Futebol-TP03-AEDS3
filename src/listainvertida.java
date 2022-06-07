@@ -61,8 +61,8 @@ public class listainvertida {
 
           criptografia crip = new criptografia();
 
-          nome = crip.descriptografar(nome);
-          nome = ft.tratarNome(nome);
+          nome = crip.descriptografar(nome);// faz a descriptografia na lista
+          nome = ft.tratarNome(nome);// trata o nome para que seja lido independente do case
           ft.setNome(nome);
 
           String cnpj = arq.readUTF();
@@ -151,6 +151,8 @@ public class listainvertida {
       RandomAccessFile arq = new RandomAccessFile("src/database/listainvertida.db", "rw");
       long variavelContador = 0;
 
+      boolean marcar20estatudovazio = true;
+
       while (variavelContador < arq.length() && sairdoLoopPrincipal) {
         posiAntesdoReadLong = arq.getFilePointer();
         String lerdoArq = arq.readUTF();
@@ -173,6 +175,7 @@ public class listainvertida {
                 qtdElementos++;
                 convert = Long.toString(pegarOsIndices);
                 concat = concat.concat(convert + ";");
+                marcar20estatudovazio = false;
               }
 
               pegarOsIndices = arq.readLong();
@@ -188,6 +191,10 @@ public class listainvertida {
           arq.seek(posiDepoisdoReadString + 168);
         }
         variavelContador = arq.getFilePointer();
+      }
+
+      if (marcar20estatudovazio && eParaImprimir) {
+        retornarPosicao = -1;
       }
 
       if (!(concat.equals("0"))) {
