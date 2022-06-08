@@ -175,7 +175,7 @@ public class criptografia {
       int tamEntrada = entrada.length();
       String chaveCrip = "";
       if (tamChave == tamEntrada) {
-
+        chaveCrip = chave;
       } else if (tamChave > tamEntrada) {
 
         chaveCrip = regularTamanhodaChave(chave, tamEntrada, 1);
@@ -272,7 +272,7 @@ public class criptografia {
       String chaveDescrip = "";
 
       if (tamChave == tamEntrada) {
-
+        chaveDescrip = chave;
       } else if (tamChave > tamEntrada) {
 
         chaveDescrip = regularTamanhodaChave(chave, tamEntrada, 1);
