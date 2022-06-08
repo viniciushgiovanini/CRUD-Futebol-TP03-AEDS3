@@ -1,3 +1,7 @@
+//Trabalho Prático 3 = Algoritmo e Estrutura de Dados 3
+//Professor: Felipe
+//Aluno: Vinícius Henrique Giovanini
+
 import java.util.*;
 
 public class futebolprincipal {
@@ -205,6 +209,10 @@ public class futebolprincipal {
             String idDelete = entrada.nextLine();
             arqcru.arquivoDelete(idDelete, entrada, futebas);
             break;
+
+          case 6:
+
+            System.out.println("");
 
           case 9:
             arqcru.deletaTudo(1, 1, 1, 1, 1, 1, 1);// Método Criado para apagar todo o arquivo

@@ -1,3 +1,7 @@
+//Trabalho Prático 3 = Algoritmo e Estrutura de Dados 3
+//Professor: Felipe
+//Aluno: Vinícius Henrique Giovanini
+
 import java.io.*;
 
 //conferir bug do (contadorPRINCIPAL - 1) que era antes (contadorPRINCIPAL) somente na 2 comparacao das ordenacoes externas

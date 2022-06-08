@@ -1,3 +1,7 @@
+//Trabalho Prático 3 = Algoritmo e Estrutura de Dados 3
+//Professor: Felipe
+//Aluno: Vinícius Henrique Giovanini
+
 import java.io.*;
 
 public class fut {
