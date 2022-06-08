@@ -15,5 +15,6 @@
 - Criptografar  
 - Descriptografar  
 - Criar o LZW (compressão e descompressão)  
+- Corrigir OE  
 
 
