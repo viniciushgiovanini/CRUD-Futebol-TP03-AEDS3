@@ -153,6 +153,7 @@ public class futebolprincipal {
     arquivocrud arqcru = new arquivocrud();
     fut futebas = new fut();
     indice ic = new indice();
+    compressao cp = new compressao();
 
     arqcru.salvarPrecisaOrdernar(2);
     String menuStr = "";
@@ -165,7 +166,7 @@ public class futebolprincipal {
     while (contador == false) {
       System.out
           .println(
-              "0 - Encerrar Programa \n1 - Cadastrar um Clube \n2 - Realizar partida\n3 - Ler um ID do arquivo\n4 - Realizar Atualização de um Registro\n5 - Realizar o Delete de um Registro\n9 - Limpar todos os Arquivos");
+              "0 - Encerrar Programa \n1 - Cadastrar um Clube \n2 - Realizar partida\n3 - Ler um ID do arquivo\n4 - Realizar Atualização de um Registro\n5 - Realizar o Delete de um Registro\n6 - Realizar Compressão do Arquivo\n9 - Limpar todos os Arquivos");
 
       // Esse switch case tem 10 opcoes então foi feito com byte mas para evitar erro
       // ele confere se o numero digitado é do tipo byte com a funcao eNumero;
@@ -211,8 +212,9 @@ public class futebolprincipal {
             break;
 
           case 6:
-
-            System.out.println("");
+            System.out.println("Digite um numero equivalente a versão da compressão !");
+            int entradaCp = entrada.nextInt();
+            cp.compressaoLzw(entradaCp);
 
           case 9:
             arqcru.deletaTudo(1, 1, 1, 1, 1, 1, 1);// Método Criado para apagar todo o arquivo
