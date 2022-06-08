@@ -12,9 +12,9 @@
 - Criar o método de descriptografia.  
 ## Próximos Passos
  
-- Criptografar  
-- Descriptografar  
-- Criar o LZW (compressão e descompressão)  
-- Corrigir OE  
+- Criar o LZW (compressão e descompressão) 
+  - Comprimir  
+  - Descomprimir   
+- Corrigir OE (3e4)  
 
 
