@@ -1,5 +1,6 @@
 import java.io.*;
 
+//conferir bug do (contadorPRINCIPAL - 1) que era antes (contadorPRINCIPAL) somente na 2 comparacao das ordenacoes externas
 public class ordenacaoexterna {
 
   private static int qtdElementoArrayIndice(indice[] a) {
@@ -241,13 +242,23 @@ public class ordenacaoexterna {
 
           if (tamanhoCaminhoIncompleto1 > tamCaminho) {
 
-            if (tamanhoCaminhoIncompleto1 != tamCaminho
-                && (tamanhoCaminhoIncompleto1 < (tamCaminho * contadorPRINCIPAL))) {
-              tamanhoCaminhoIncompleto1 = tamanhoCaminhoIncompleto1 - (tamCaminho * (contadorPRINCIPAL - 1));
+            // if (tamanhoCaminhoIncompleto1 != tamCaminho
+            // && (tamanhoCaminhoIncompleto1 < (tamCaminho * contadorPRINCIPAL))) {
+            // tamanhoCaminhoIncompleto1 = tamanhoCaminhoIncompleto1 - (tamCaminho *
+            // (contadorPRINCIPAL - 1));
+            // } else {
+
+            tamanhoCaminhoIncompleto1 = tamCaminho;
+            // }
+
+          } else {
+            if (tamanhoCaminhoIncompleto1 < tamCaminho) {
+              // tamanhoCaminhoIncompleto1 = tamCaminho - tamanhoCaminhoIncompleto1;
+            } else if (tamanhoCaminhoIncompleto1 > tamCaminho) {
+              tamanhoCaminhoIncompleto1 -= tamCaminho;
             } else {
               tamanhoCaminhoIncompleto1 = tamCaminho;
             }
-
           }
           while (contardorPonteiroArq1 < (tamanhoCaminhoIncompleto1)) {
             arq3.writeShort(ic.getIdIndice());
@@ -267,13 +278,25 @@ public class ordenacaoexterna {
 
           tamanhoCaminhoIncompleto2 /= 13;
           if (tamanhoCaminhoIncompleto2 > tamCaminho) {
-            if (tamanhoCaminhoIncompleto2 != tamCaminho
-                && (tamanhoCaminhoIncompleto2 < (tamCaminho * contadorPRINCIPAL))) {
-              tamanhoCaminhoIncompleto2 = tamanhoCaminhoIncompleto2 - (tamCaminho * (contadorPRINCIPAL - 1));
+            // if (tamanhoCaminhoIncompleto2 != tamCaminho
+            // && (tamanhoCaminhoIncompleto2 < (tamCaminho * contadorPRINCIPAL))) {
+            // tamanhoCaminhoIncompleto2 = tamanhoCaminhoIncompleto2 - (tamCaminho *
+            // (contadorPRINCIPAL - 1));
+            // System.out.println("ENTROU NO Q EU QUERO");
+            // } else {
 
+            tamanhoCaminhoIncompleto2 = tamCaminho;
+            // }
+          } else {
+
+            if (tamanhoCaminhoIncompleto2 < tamCaminho) {
+              // tamanhoCaminhoIncompleto2 = tamCaminho - tamanhoCaminhoIncompleto2;
+            } else if (tamanhoCaminhoIncompleto2 > tamCaminho) {
+              tamanhoCaminhoIncompleto2 -= tamCaminho;
             } else {
               tamanhoCaminhoIncompleto2 = tamCaminho;
             }
+
           }
 
           long tamArq3 = arq3.length();
@@ -314,7 +337,9 @@ public class ordenacaoexterna {
         ultimoSavearq3 = true;
       }
 
-    } catch (Exception e) {
+    } catch (
+
+    Exception e) {
       System.out.println("Error acontecendo no Ordernar1e2para3: " + e.getMessage());
       return false;
     }
@@ -453,9 +478,19 @@ public class ordenacaoexterna {
 
           if (tamanhoCaminhoIncompleto1 > tamCaminho) {
 
-            if (tamanhoCaminhoIncompleto1 != tamCaminho && (tamanhoArq2Inteiro < (tamCaminho * contadorPRINCIPAL))) {
-              tamanhoCaminhoIncompleto1 = tamanhoCaminhoIncompleto1 - (tamCaminho * (contadorPRINCIPAL - 1));
-              ;
+            // if (tamanhoCaminhoIncompleto1 != tamCaminho
+            // && (tamanhoArq2Inteiro < (tamCaminho * contadorPRINCIPAL))) {
+            // tamanhoCaminhoIncompleto1 = tamanhoCaminhoIncompleto1 - (tamCaminho *
+            // (contadorPRINCIPAL - 1));
+
+            // } else {
+            tamanhoCaminhoIncompleto1 = tamCaminho;
+            // }
+          } else {
+            if (tamanhoCaminhoIncompleto1 < tamCaminho) {
+              // tamanhoCaminhoIncompleto1 = tamCaminho - tamanhoCaminhoIncompleto1;
+            } else if (tamanhoCaminhoIncompleto1 > tamCaminho) {
+              tamanhoCaminhoIncompleto1 -= tamCaminho;
             } else {
               tamanhoCaminhoIncompleto1 = tamCaminho;
             }
@@ -482,8 +517,18 @@ public class ordenacaoexterna {
 
           if (tamanhoCaminhoIncompleto2 > tamCaminho) {
 
-            if (tamanhoCaminhoIncompleto2 != tamCaminho && (tamanhoArq2Inteiro < (tamCaminho * contadorPRINCIPAL))) {
-              tamanhoCaminhoIncompleto2 = tamanhoCaminhoIncompleto2 - (tamCaminho * (contadorPRINCIPAL - 1));
+            // if (tamanhoCaminhoIncompleto2 != tamCaminho
+            // && (tamanhoArq2Inteiro < (tamCaminho * contadorPRINCIPAL))) {
+            // tamanhoCaminhoIncompleto2 = tamanhoCaminhoIncompleto2 - (tamCaminho *
+            // (contadorPRINCIPAL - 1));
+            // } else {
+            tamanhoCaminhoIncompleto2 = tamCaminho;
+            // }
+          } else {
+            if (tamanhoCaminhoIncompleto2 < tamCaminho) {
+              // tamanhoCaminhoIncompleto2 = tamCaminho - tamanhoCaminhoIncompleto2;
+            } else if (tamanhoCaminhoIncompleto2 > tamCaminho) {
+              tamanhoCaminhoIncompleto2 -= tamCaminho;
             } else {
               tamanhoCaminhoIncompleto2 = tamCaminho;
             }
@@ -662,16 +707,26 @@ public class ordenacaoexterna {
           int tamanhoCaminhoIncompleto3 = (int) arq3.length();
           tamanhoCaminhoIncompleto3 /= 13;
 
-          if (tamanhoCaminhoIncompleto3 > tamCaminho) {
+          if (contardorPonteiroArq3 + contardorPonteiroArq4 > tamCaminho) {
 
-            if (tamanhoCaminhoIncompleto3 != tamCaminho
-                && (tamanhoCaminhoIncompleto3 < (tamCaminho * contadorPRINCIPAL))) {
-              tamanhoCaminhoIncompleto3 = tamanhoCaminhoIncompleto3 - (tamCaminho * (contadorPRINCIPAL - 1));
+            // if (tamanhoCaminhoIncompleto3 != tamCaminho
+            // && (tamanhoCaminhoIncompleto3 < (tamCaminho * (contadorPRINCIPAL - 1)))) {
+            // tamanhoCaminhoIncompleto3 = tamanhoCaminhoIncompleto3 - (tamCaminho *
+            // (contadorPRINCIPAL - 1));
 
+            // } else {
+            tamanhoCaminhoIncompleto3 = tamCaminho;
+            // }
+          } else {
+            if (tamanhoCaminhoIncompleto3 < tamCaminho) {
+              // tamanhoCaminhoIncompleto3 = tamCaminho - tamanhoCaminhoIncompleto3;
+            } else if (tamanhoCaminhoIncompleto3 > tamCaminho) {
+              tamanhoCaminhoIncompleto3 -= tamCaminho;
             } else {
               tamanhoCaminhoIncompleto3 = tamCaminho;
             }
           }
+
           while (contardorPonteiroArq3 < (tamanhoCaminhoIncompleto3)) {
             arq1.writeShort(ic.getIdIndice());
             arq1.writeLong(ic.getPosiIndice());
@@ -694,10 +749,19 @@ public class ordenacaoexterna {
 
           if (contardorPonteiroArq3 + contardorPonteiroArq4 > tamCaminho) {
 
-            if (tamanhoCaminhoIncompleto4 != tamCaminho
-                && (tamanhoCaminhoIncompleto4 < (tamCaminho * contadorPRINCIPAL))) {
-              tamanhoCaminhoIncompleto4 = tamanhoCaminhoIncompleto4 - (tamCaminho * (contadorPRINCIPAL - 1));
-              tamanhoCaminhoIncompleto4++;
+            // if (tamanhoCaminhoIncompleto4 != tamCaminho
+            // && (tamanhoCaminhoIncompleto4 < (tamCaminho * (contadorPRINCIPAL - 1)))) {
+            // tamanhoCaminhoIncompleto4 = tamanhoCaminhoIncompleto4 - (tamCaminho *
+            // (contadorPRINCIPAL - 1));
+            // tamanhoCaminhoIncompleto4++;
+            // } else {
+            tamanhoCaminhoIncompleto4 = tamCaminho;
+            // }
+          } else {
+            if (tamanhoCaminhoIncompleto4 < tamCaminho) {
+              // tamanhoCaminhoIncompleto4 = tamCaminho - tamanhoCaminhoIncompleto4;
+            } else if (tamanhoCaminhoIncompleto4 > tamCaminho) {
+              tamanhoCaminhoIncompleto4 -= tamCaminho;
             } else {
               tamanhoCaminhoIncompleto4 = tamCaminho;
             }
@@ -875,9 +939,18 @@ public class ordenacaoexterna {
 
           if (qtdElementosarq2 > tamCaminho) {
 
-            if (qtdElementosarq2 != tamCaminho && (qtdElementosarq2 < (tamCaminho * contadorPRINCIPAL))) {
-              qtdElementosarq2 = tamCaminho - (contadorPRINCIPAL - 1);
+            // if (qtdElementosarq2 != tamCaminho && (qtdElementosarq2 < (tamCaminho *
+            // (contadorPRINCIPAL - 1)))) {
+            // qtdElementosarq2 = tamCaminho - (contadorPRINCIPAL - 1);
 
+            // } else {
+            qtdElementosarq2 = tamCaminho;
+            // }
+          } else {
+            if (qtdElementosarq2 < tamCaminho) {
+              // qtdElementosarq2 = tamCaminho - qtdElementosarq2;
+            } else if (qtdElementosarq2 > tamCaminho) {
+              qtdElementosarq2 -= tamCaminho;
             } else {
               qtdElementosarq2 = tamCaminho;
             }
@@ -904,9 +977,18 @@ public class ordenacaoexterna {
           int qtdElementosarq2 = (int) tamArq4 / 13;
           if (qtdElementosarq2 > tamCaminho) {
 
-            if (qtdElementosarq2 != tamCaminho && (qtdElementosarq2 < (tamCaminho * contadorPRINCIPAL))) {
-              qtdElementosarq2 = tamCaminho - (contadorPRINCIPAL - 1);
+            // if (qtdElementosarq2 != tamCaminho && (qtdElementosarq2 < (tamCaminho *
+            // contadorPRINCIPAL))) {
+            // qtdElementosarq2 = tamCaminho - (contadorPRINCIPAL - 1);
 
+            // } else {
+            qtdElementosarq2 = tamCaminho;
+            // }
+          } else {
+            if (qtdElementosarq2 < tamCaminho) {
+              // qtdElementosarq2 = tamCaminho - qtdElementosarq2;
+            } else if (qtdElementosarq2 > tamCaminho) {
+              qtdElementosarq2 -= tamCaminho;
             } else {
               qtdElementosarq2 = tamCaminho;
             }
@@ -1089,14 +1171,15 @@ public class ordenacaoexterna {
 
           arqcru.deletaTudo(-1, -1, -1, 1, 1, -1, -1);
 
-          if (contadorEXECPrinc != 0) {
+          if (contadorEXECPrinc != 0) {// parte do codigo que pode ta dando possivel incompatibilidade
             tamanhoCaminho *= 2;
-            pararExecucaoPrincipal /= 2;
+            pararExecucaoPrincipal /= 4;
             arq1.seek(0);
             arq2.seek(0);
             arq3.seek(0);
             arq4.seek(0);
             contadorParaSubtrairdoCaminho = 0;
+            contadorQtdExecCaminhosMsmArq = 0;
           }
 
           while (contadorQtdExecCaminhosMsmArq < pararExecucaoPrincipal) {
@@ -1129,7 +1212,7 @@ public class ordenacaoexterna {
           tamanhoCaminho *= 2;
           contadorParaSubtrairdoCaminho = 2;
 
-          int pararExecucaoPrincipal2 = (int) Math.floor(numeroParaParaExecPRINC / 2);
+          int pararExecucaoPrincipal2 = (int) Math.floor(pararExecucaoPrincipal / 2);
           int contador3e4salvarem1e2 = 0;
 
           while (contador3e4salvarem1e2 < pararExecucaoPrincipal2) {
