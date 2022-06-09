@@ -41,6 +41,13 @@ public class compressao {
 
   private String realizarCompressao(String entrada) {
 
+    // Ele ja incrementa no dicionario perfeitamente, só falta agora incrementar
+    // quando acha um novo número no dicionario como um de 3 letras
+
+    criptografia crpi = new criptografia();
+
+    entrada = crpi.descriptografar(entrada);// retirar essa crip depois
+
     String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
         "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
         "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " " };
@@ -65,6 +72,9 @@ public class compressao {
 
         proxLetra += letraS;
         boolean podePesquisar = true;
+        int iSave = i;
+        boolean podeMudaroI = true;
+
         while (valorRetorno != -1) {
           saveValorRetorno = valorRetorno;
 
@@ -74,6 +84,8 @@ public class compressao {
           } else if (i == entrada.length() - 1) {
             valorRetorno = -1;
             podePesquisar = false;
+            podeMudaroI = false;
+
           }
 
           if (podePesquisar) {
@@ -82,23 +94,24 @@ public class compressao {
 
           if (valorRetorno != -1) {
             letraS += proxLetra;
+
           }
 
           contadorProxLetra++;
+          i++;
         }
 
         if (saveValorRetorno != -1) {
           valorCompressao += saveValorRetorno;
+          if (podeMudaroI) {
+            i = iSave;
+          }
+
         }
 
         int posicaoNoDicionario = qtdElementos(compressaoDicionario);
 
-        if (i % 2 == 1) {
-          posicaoNoDicionario -= 1;
-          compressaoDicionario[posicaoNoDicionario] += letraS;
-        } else {
-          compressaoDicionario[posicaoNoDicionario] = letraS;
-        }
+        compressaoDicionario[posicaoNoDicionario] = proxLetra;
 
         proxLetra = "";
         letraS = "";
@@ -118,7 +131,7 @@ public class compressao {
 
     RandomAccessFile arqPrinci;
     RandomAccessFile arqCompri;
-    indice ic = new indice();
+    fut ft = new fut();
 
     try {
       String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada;
@@ -137,9 +150,23 @@ public class compressao {
 
         }
 
-        ic.setIdIndice(arqPrinci.readShort());
-        ic.setLapide(arqPrinci.readUTF());
-        realizarCompressao(arqPrinci.readUTF().toUpperCase());
+        ft.setIdClube(arqPrinci.readShort());
+        ft.setLapide(arqPrinci.readUTF());
+        String receberByteComprimidoNome = realizarCompressao(arqPrinci.readUTF().toUpperCase());
+        String receberByteComprimidoCnpj = realizarCompressao(arqPrinci.readUTF().toUpperCase());
+        String receberByteComprimidoCidade = realizarCompressao(arqPrinci.readUTF().toUpperCase());
+
+        if (!(receberByteComprimidoNome.equals(""))) {
+          ft.setNome(receberByteComprimidoNome);
+        }
+
+        if (!(receberByteComprimidoCnpj.equals(""))) {
+          ft.setCnpj(receberByteComprimidoCnpj);
+        }
+
+        if (!(receberByteComprimidoCidade.equals(""))) {
+          ft.setCidade(receberByteComprimidoCidade);
+        }
 
       }
 
