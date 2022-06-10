@@ -41,8 +41,8 @@ public class compressao {
 
   private String realizarCompressao(String entrada) {
 
-    // Ele ja incrementa no dicionario perfeitamente, só falta agora incrementar
-    // quando acha um novo número no dicionario como um de 3 letras
+    // ta com erro no wawab mas o wawawawa faz direito, ele ta com erro na hora de
+    // encerrar.
 
     criptografia crpi = new criptografia();
 
@@ -57,35 +57,46 @@ public class compressao {
     String valorCompressao = "";
     String letraS = "";
     String proxLetra = "";
-    int contadorProxLetra = 1;
-    int saveValorRetorno = 0;
-    // fim das variaveis do método realizar compressaoDicionario
+    String letraParaSalvarnoDic = "";
 
-    for (int i = 0; i < entrada.length(); i++) {
+    int saveValorRetorno = 0;
+    int i = 0;
+    boolean podeEncerrar = false;
+
+    // fim das variaveis do método realizar compressaoDicionario
+    while (i < entrada.length() && !podeEncerrar) {
+
       letraS = "";
-      char letra = entrada.charAt(i);
+      char letra = ' ';
+      int valorRetorno = 0;
+
+      letra = entrada.charAt(i);
       letraS += letra;
-      contadorProxLetra = 1;
-      int valorRetorno = pesquisarNoDicionario(letraS, compressaoDicionario);
+      valorRetorno = pesquisarNoDicionario(letraS, compressaoDicionario);
 
       if (valorRetorno != -1) {
 
         proxLetra += letraS;
         boolean podePesquisar = true;
-        int iSave = i;
-        boolean podeMudaroI = true;
+        char letraProx = ' ';
 
-        while (valorRetorno != -1) {
+        while (valorRetorno != -1 && !podeEncerrar) {
+
           saveValorRetorno = valorRetorno;
+          if (i < entrada.length()) {
+            if (i == entrada.length() - 1) {
 
-          if (i < entrada.length() - 1) {
-            char letraProx = entrada.charAt(i + contadorProxLetra);
-            proxLetra += letraProx;
-          } else if (i == entrada.length() - 1) {
-            valorRetorno = -1;
-            podePesquisar = false;
-            podeMudaroI = false;
+              proxLetra = letraS;
+              podePesquisar = false;
+              podeEncerrar = true;
+              valorRetorno = saveValorRetorno;
 
+            } else {
+
+              letraProx = entrada.charAt(i + 1);
+              proxLetra += letraProx;
+
+            }
           }
 
           if (podePesquisar) {
@@ -93,28 +104,31 @@ public class compressao {
           }
 
           if (valorRetorno != -1) {
-            letraS += proxLetra;
 
+            letraS = proxLetra;
+            i++;
+
+          } else {
+
+            letraParaSalvarnoDic = proxLetra;
+            i++;
           }
 
-          contadorProxLetra++;
-          i++;
         }
 
         if (saveValorRetorno != -1) {
           valorCompressao += saveValorRetorno;
-          if (podeMudaroI) {
-            i = iSave;
-          }
 
         }
 
         int posicaoNoDicionario = qtdElementos(compressaoDicionario);
-
-        compressaoDicionario[posicaoNoDicionario] = proxLetra;
+        if (!(letraParaSalvarnoDic.equals(""))) {
+          compressaoDicionario[posicaoNoDicionario] = letraParaSalvarnoDic;
+        }
 
         proxLetra = "";
         letraS = "";
+        letraParaSalvarnoDic = "";
       }
 
     }
