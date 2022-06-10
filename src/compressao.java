@@ -42,8 +42,8 @@ public class compressao {
   private String realizarCompressao(String entrada) {
 
     String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
-        "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
-        "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " ", "/", "." };
+        "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
+        "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " ", "/", ".", "-" };
 
     String[] compressaoDicionario = new String[dicionario.length * 3];
     System.arraycopy(dicionario, 0, compressaoDicionario, 0, dicionario.length);
@@ -122,7 +122,7 @@ public class compressao {
         letraS = "";
         letraParaSalvarnoDic = "";
       } else {
-        i++;
+        podeEncerrar = true;
         valorCompressao = "";
       }
 
@@ -144,7 +144,7 @@ public class compressao {
 
     try {
       String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada + ".db";
-      arqPrinci = new RandomAccessFile("src/database/futebol.db", "rw");
+      arqPrinci = new RandomAccessFile("src/database/futebol.db", "r");
       arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
 
       boolean marcadorPrimeiros4bytes = false;
@@ -159,22 +159,39 @@ public class compressao {
 
         }
 
+        // Os sets tem que salvar em byte e nao em string entao nao poe usar a classa
+        // indice, pois se não vai salvar com tipo primitivo, tem que fazer um novo
+        // tobyteArray fazer dia 10/06
+
         ft.setIdClube(arqPrinci.readShort());
         ft.setLapide(arqPrinci.readUTF());
-        String receberByteComprimidoNome = realizarCompressao(arqPrinci.readUTF().toUpperCase());
-        String receberByteComprimidoCnpj = realizarCompressao(arqPrinci.readUTF().toUpperCase());
-        String receberByteComprimidoCidade = realizarCompressao(arqPrinci.readUTF().toUpperCase());
+        String ftNome = arqPrinci.readUTF().toUpperCase();
+        String ftCnpj = arqPrinci.readUTF().toUpperCase();
+        String ftCidade = arqPrinci.readUTF().toUpperCase();
+        String receberByteComprimidoNome = realizarCompressao(ftNome);
+        String receberByteComprimidoCnpj = realizarCompressao(ftCnpj);
+        String receberByteComprimidoCidade = realizarCompressao(ftCidade);
 
         if (!(receberByteComprimidoNome.equals(""))) {
           ft.setNome(receberByteComprimidoNome);
+        } else {
+          ft.setNome(ftNome);
         }
 
-        if (!(receberByteComprimidoCnpj.equals(""))) {
-          ft.setCnpj(receberByteComprimidoCnpj);
+        boolean podeSetarCnpj = ft.verificaCPNJ(ftCnpj);
+
+        if (!(receberByteComprimidoCnpj.equals("")) && podeSetarCnpj) {
+          // ft.setCnpjComprimido(receberByteComprimidoCnpj);
+        } else if (podeSetarCnpj) {
+
+          // ft.setCnpj(ftCnpj);
+
         }
 
         if (!(receberByteComprimidoCidade.equals(""))) {
           ft.setCidade(receberByteComprimidoCidade);
+        } else {
+          ft.setCidade(ftCidade);
         }
 
         ft.setPartidasJogadas(arqPrinci.readByte());

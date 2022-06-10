@@ -215,7 +215,7 @@ public class futebolprincipal {
             System.out.println("Digite um numero equivalente a versão da compressão !");
             int entradaCp = entrada.nextInt();
             cp.compressaoLzw(entradaCp);
-
+            break;
           case 9:
             arqcru.deletaTudo(1, 1, 1, 1, 1, 1, 1);// Método Criado para apagar todo o arquivo
             arqcru.setPrecisarOrdenar(true);
