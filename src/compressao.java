@@ -43,7 +43,7 @@ public class compressao {
 
     String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
         "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
-        "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " " };
+        "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " ", "/", "." };
 
     String[] compressaoDicionario = new String[dicionario.length * 3];
     System.arraycopy(dicionario, 0, compressaoDicionario, 0, dicionario.length);
@@ -121,6 +121,9 @@ public class compressao {
         proxLetra = "";
         letraS = "";
         letraParaSalvarnoDic = "";
+      } else {
+        i++;
+        valorCompressao = "";
       }
 
     }
@@ -140,7 +143,7 @@ public class compressao {
     fut ft = new fut();
 
     try {
-      String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada;
+      String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada + ".db";
       arqPrinci = new RandomAccessFile("src/database/futebol.db", "rw");
       arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
 
