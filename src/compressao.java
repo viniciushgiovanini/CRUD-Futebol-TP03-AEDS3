@@ -41,9 +41,6 @@ public class compressao {
 
   private String realizarCompressao(String entrada) {
 
-    // ta com erro no wawab mas o wawawawa faz direito, ele ta com erro na hora de
-    // encerrar.
-
     criptografia crpi = new criptografia();
 
     entrada = crpi.descriptografar(entrada);// retirar essa crip depois
@@ -63,7 +60,6 @@ public class compressao {
     int i = 0;
     boolean podeEncerrar = false;
 
-    // fim das variaveis do método realizar compressaoDicionario
     while (i < entrada.length() && !podeEncerrar) {
 
       letraS = "";
