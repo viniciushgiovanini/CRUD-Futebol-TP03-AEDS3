@@ -41,10 +41,6 @@ public class compressao {
 
   private String realizarCompressao(String entrada) {
 
-    criptografia crpi = new criptografia();
-
-    entrada = crpi.descriptografar(entrada);// retirar essa crip depois
-
     String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
         "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
         "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " " };
@@ -146,7 +142,7 @@ public class compressao {
     try {
       String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada;
       arqPrinci = new RandomAccessFile("src/database/futebol.db", "rw");
-      // arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
+      arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
 
       boolean marcadorPrimeiros4bytes = false;
       int tamanhodoArquivo4bytesI = 0;
@@ -178,9 +174,19 @@ public class compressao {
           ft.setCidade(receberByteComprimidoCidade);
         }
 
+        ft.setPartidasJogadas(arqPrinci.readByte());
+        ft.setPontos(arqPrinci.readByte());
+
+        byte b[];
+
+        b = ft.toByteArray();
+
+        arqCompri.write(tamanhodoArquivo4bytesI);
+        arqCompri.write(b);
+
       }
 
-      // arqCompri.close();
+      arqCompri.close();
       arqPrinci.close();
     } catch (Exception e) {
       System.out.println("Erro no compressaoLze: " + e.getMessage());
