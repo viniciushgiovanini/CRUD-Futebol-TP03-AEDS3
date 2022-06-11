@@ -280,10 +280,10 @@ public class compressao {
     return baos.toByteArray();
   }
 
-  private int porcentagemDeCompressao(byte[] depoisCompre, long antesCompre) {
+  private int porcentagemDeCompressao(long depoisCompre, long antesCompre) {
 
-    float a = depoisCompre.length;
-    float b = (float) antesCompre;
+    float a = depoisCompre;
+    float b = antesCompre;
 
     a *= 4;
     b *= 4;
@@ -317,7 +317,6 @@ public class compressao {
       String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada + ".db";
       String caminhodoArqLista = "src/database/compressão/ListaCompressao" + entrada + ".db";
       String caminhoArqIndice = "src/database/compressão/IndiceCompressao" + entrada + ".db";
-      deletaTudo(caminhodoArqCompri);
       arqPrinci = new RandomAccessFile("src/database/futebol.db", "r");
       arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
       arqLista = new RandomAccessFile(caminhodoArqLista, "rw");
@@ -325,22 +324,15 @@ public class compressao {
       deletaTudo(caminhodoArqCompri);
       deletaTudo(caminhodoArqLista);
       deletaTudo(caminhoArqIndice);
-      boolean marcadorPrimeiros4bytes = false;
-      int tamanhodoArquivo4bytesI = 0;
+
       arqPrinci.seek(2);
+      byte b[] = { -7 };
       while (arqPrinci.getFilePointer() < arqPrinci.length()) {
-
-        if (!marcadorPrimeiros4bytes) {
-
-          tamanhodoArquivo4bytesI = arqPrinci.readInt();// apagar essa variavel depois pois ela é descessaria
-          marcadorPrimeiros4bytes = true;
-
-        }
 
         // Os sets tem que salvar em byte e nao em string entao nao poe usar a classa
         // indice, pois se não vai salvar com tipo primitivo, tem que fazer um novo
         // tobyteArray fazer dia 10/06
-
+        int tamanhodoRegistro = arqPrinci.readInt();// apagar essa variavel depois pois ela é descessaria
         Short iDclube = arqPrinci.readShort();
         String lapide = arqPrinci.readUTF();
         String ftNome = arqPrinci.readUTF().toUpperCase();
@@ -353,30 +345,28 @@ public class compressao {
         byte partidasJogadas = arqPrinci.readByte();
         byte pontos = arqPrinci.readByte();
 
-        byte b[];
-
         b = toByteArray(iDclube, lapide, ftNome, ftCnpj, ftCidade, partidasJogadas, pontos,
             receberByteComprimidoNome, receberByteComprimidoCnpj, receberByteComprimidoCidade);
-
-        // fazer metodo para calcular taxa de compressao
-        int taxaCompre = porcentagemDeCompressao(b, arqPrinci.length());
-
-        if (taxaCompre != -1) {
-          System.out.println("A taxa de compresao total do arquivo foi de " + taxaCompre + "%");
-        } else {
-          System.out.println("A compressao resultou numa piora no tamanho do arquivo original NESTE CASO !");
-        }
-
-        byte[] pegarLista = Files.readAllBytes(Paths.get("src/database/listainvertida.db"));
-        byte[] pegarIndice = Files.readAllBytes(Paths.get("src/database/aindices.db"));
-
-        arqLista.write(pegarLista);
-        arqIndice.write(pegarIndice);
-
-        arqCompri.writeInt(tamanhodoArquivo4bytesI);
+        arqCompri.writeInt(tamanhodoRegistro);
         arqCompri.write(b);// criar o tobytearray
-
       }
+      // fazer metodo para calcular taxa de compressao
+      int taxaCompre = porcentagemDeCompressao(arqCompri.length(), arqPrinci.length());
+
+      if (taxaCompre != -1) {
+        System.out.println("-----X-----" + "\n");
+        System.out.println("A taxa de compresao total do arquivo foi de " + taxaCompre + "%" + "\n");
+        System.out.println("-----X-----" + "\n");
+      } else {
+        System.out.println("A compressao resultou numa piora no tamanho do arquivo original NESTE CASO !");
+      }
+
+      byte[] pegarLista = Files.readAllBytes(Paths.get("src/database/listainvertida.db"));
+      byte[] pegarIndice = Files.readAllBytes(Paths.get("src/database/aindices.db"));
+
+      arqLista.write(pegarLista);
+      arqIndice.write(pegarIndice);
+
       arqIndice.close();
       arqLista.close();
       arqCompri.close();
@@ -389,4 +379,42 @@ public class compressao {
   // --------------------X-Fim-Métodos-Principais-Compressao-X--------------------//
 
   // --------------------X-Inicio-Métodos-Principais-Descompressao-X--------------------//
+
+  public void descompressaoLzw(int entrada) {
+
+    // tamanhoArq+id+lapide+boolean(SETIVERBA)+byte-10(correspondenteaofinaldoarray),
+    // tamanhoArq+id+lapide+boolean+nome(SenaoTiverBA),
+
+    RandomAccessFile arqPrinci;
+    RandomAccessFile arqCompri;
+    RandomAccessFile listaPrinci;
+    RandomAccessFile indicePrinci;
+
+    try {
+
+      String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada + ".db";
+      String caminhodoArqLista = "src/database/compressão/ListaCompressao" + entrada + ".db";
+      String caminhoArqIndice = "src/database/compressão/IndiceCompressao" + entrada + ".db";
+      arqPrinci = new RandomAccessFile("src/database/futebol.db", "r");
+      arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
+      listaPrinci = new RandomAccessFile("src/database/aindices.db", "rw");
+      indicePrinci = new RandomAccessFile("src/database/listainvertida.db", "rw");
+
+      byte[] pegarLista = Files.readAllBytes(Paths.get(caminhodoArqLista));
+      byte[] pegarIndice = Files.readAllBytes(Paths.get(caminhoArqIndice));
+      deletaTudo("src/database/aindices.db");
+      deletaTudo("src/database/listainvertida.db");
+      listaPrinci.write(pegarLista);
+      indicePrinci.write(pegarIndice);
+
+      arqPrinci.close();
+      arqCompri.close();
+      listaPrinci.close();
+      indicePrinci.close();
+
+    } catch (Exception e) {
+      System.out.println("Erro no descompressaoLzw: " + e.getMessage());
+    }
+
+  }
 }
