@@ -2,13 +2,11 @@
 
 - Essa é a branch **PRINCIPAL**
 
-## Melhorias Versão [0.5]
+## Melhorias Versão [0.6]
  
-- Compressão feita, falta agora calcular a taxa de compressao somente.  
-- Proximo passo é fazer a descompressao.  
+- Compressão completa 100%.  
 ## Próxima melhoria (Problemas) 
  
-- Criar taxa de compressao.      
 - Criar o método de descriptografia.  
 ## Próximos Passos
  

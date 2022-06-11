@@ -1,6 +1,20 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class compressao {
+
+  private void deletaTudo(String caminho) {
+
+    try {
+      PrintWriter writer = new PrintWriter(caminho);
+      writer.print("");
+      writer.close();
+    } catch (Exception e) {
+      System.out.println("Erro no método deletaTudoCompressao: " + e.getMessage());
+    }
+
+  }
 
   private int qtdElementosString(String[] a) {
 
@@ -200,6 +214,9 @@ public class compressao {
     // for true o nome é um int, se for false é string, nome, boolean verificador
     // pra cnpj, cnpj, boolean verificador cidade, cidade, pj e pontos
 
+    // tamanhoArq+id+lapide+boolean(SETIVERBA)+byte-10(correspondenteaofinaldoarray),
+    // tamanhoArq+id+lapide+boolean+nome(SenaoTiverBA),
+
     fut ft = new fut();
 
     byte[] ba;
@@ -226,6 +243,7 @@ public class compressao {
       ba = deIntParaByteArray(nomeArray);
       dos.writeBoolean(saveNomeArray);
       dos.write(ba);
+      dos.writeByte(-10);
     } else {
       dos.writeBoolean(saveNomeArray);
       dos.writeUTF(nome);
@@ -234,7 +252,9 @@ public class compressao {
     if (saveCnpjArray) {
       dos.writeBoolean(saveCnpjArray);
       ba = deIntParaByteArray(cnpjArray);
+      dos.writeShort(ba.length);
       dos.write(ba);
+      dos.writeByte(-10);
     } else {
       dos.writeBoolean(saveCnpjArray);
       dos.writeUTF("");
@@ -244,6 +264,7 @@ public class compressao {
       dos.writeBoolean(saveCidadeArray);
       ba = deIntParaByteArray(cidadeArray);
       dos.write(ba);
+      dos.writeByte(-10);
     } else {
       dos.writeBoolean(saveCidadeArray);
       dos.writeUTF(cidade);
@@ -252,6 +273,27 @@ public class compressao {
     dos.writeByte(pj);
     dos.writeByte(pts);
     return baos.toByteArray();
+  }
+
+  private int porcentagemDeCompressao(byte[] depoisCompre, long antesCompre) {
+
+    float a = depoisCompre.length;
+    float b = (float) antesCompre;
+
+    a *= 4;
+    b *= 4;
+
+    float resp = a / b;
+
+    resp *= 100;
+    int respO = (int) resp;
+    respO = 100 - respO;
+
+    if (respO <= 0) {
+      respO = -1;
+    }
+
+    return respO;
   }
 
   public void compressaoLzw(int entrada) {
@@ -264,12 +306,20 @@ public class compressao {
 
     RandomAccessFile arqPrinci;
     RandomAccessFile arqCompri;
-
+    RandomAccessFile arqLista;
+    RandomAccessFile arqIndice;
     try {
       String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada + ".db";
+      String caminhodoArqLista = "src/database/compressão/ListaCompressao" + entrada + ".db";
+      String caminhoArqIndice = "src/database/compressão/IndiceCompressao" + entrada + ".db";
+      deletaTudo(caminhodoArqCompri);
       arqPrinci = new RandomAccessFile("src/database/futebol.db", "r");
       arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
-
+      arqLista = new RandomAccessFile(caminhodoArqLista, "rw");
+      arqIndice = new RandomAccessFile(caminhoArqIndice, "rw");
+      deletaTudo(caminhodoArqCompri);
+      deletaTudo(caminhodoArqLista);
+      deletaTudo(caminhoArqIndice);
       boolean marcadorPrimeiros4bytes = false;
       int tamanhodoArquivo4bytesI = 0;
       arqPrinci.seek(2);
@@ -304,12 +354,26 @@ public class compressao {
             receberByteComprimidoNome, receberByteComprimidoCnpj, receberByteComprimidoCidade);
 
         // fazer metodo para calcular taxa de compressao
+        int taxaCompre = porcentagemDeCompressao(b, arqPrinci.length());
+
+        if (taxaCompre != -1) {
+          System.out.println("A taxa de compresao total do arquivo foi de " + taxaCompre + "%");
+        } else {
+          System.out.println("A compressao resultou numa piora no tamanho do arquivo original NESTE CASO !");
+        }
+
+        byte[] pegarLista = Files.readAllBytes(Paths.get("src/database/listainvertida.db"));
+        byte[] pegarIndice = Files.readAllBytes(Paths.get("src/database/aindices.db"));
+
+        arqLista.write(pegarLista);
+        arqIndice.write(pegarIndice);
 
         arqCompri.writeInt(tamanhodoArquivo4bytesI);
         arqCompri.write(b);// criar o tobytearray
 
       }
-
+      arqIndice.close();
+      arqLista.close();
       arqCompri.close();
       arqPrinci.close();
     } catch (Exception e) {
