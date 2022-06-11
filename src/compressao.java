@@ -4,6 +4,8 @@ import java.nio.file.Paths;
 
 public class compressao {
 
+  // --------------------X-Métodos-de-ajuda-Compressao-X--------------------//
+
   private void deletaTudo(String caminho) {
 
     try {
@@ -86,6 +88,21 @@ public class compressao {
     return teste;
   }
 
+  private byte[] deIntParaByteArray(int[] s) {
+
+    byte[] a = new byte[s.length];
+
+    for (int i = 0; i < s.length; i++) {
+
+      a[i] = (byte) s[i];
+
+    }
+    return a;
+  }
+
+  // --------------------X-Fim-Métodos-de-ajuda-Compressao-X--------------------//
+
+  // --------------------X-Inicio-Métodos-Principais-Compressao-X--------------------//
   private int[] realizarCompressao(String entrada) {
 
     String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
@@ -191,18 +208,6 @@ public class compressao {
     }
 
     return vRetorno;
-  }
-
-  private byte[] deIntParaByteArray(int[] s) {
-
-    byte[] a = new byte[s.length];
-
-    for (int i = 0; i < s.length; i++) {
-
-      a[i] = (byte) s[i];
-
-    }
-    return a;
   }
 
   private byte[] toByteArray(short iD, String lapide, String nome, String cnpj,
@@ -381,5 +386,7 @@ public class compressao {
     }
 
   }
+  // --------------------X-Fim-Métodos-Principais-Compressao-X--------------------//
 
+  // --------------------X-Inicio-Métodos-Principais-Descompressao-X--------------------//
 }
