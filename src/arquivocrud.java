@@ -193,8 +193,10 @@ public class arquivocrud {
       li.escreverListaInvertida(ft.getNome());
 
       if (!(ft.getCidade().equals(""))) {
-        li.setNomeLista(ft.getCidade());
-        li.escreverListaInvertida(ft.getCidade());
+        String cidadeCripto = ft.getCidade();
+        cidadeCripto = crip.criptografar(cidadeCripto);
+        li.setNomeLista(cidadeCripto);
+        li.escreverListaInvertida(cidadeCripto);
       }
 
     } catch (Exception e) {
