@@ -166,7 +166,7 @@ public class futebolprincipal {
     while (contador == false) {
       System.out
           .println(
-              "0 - Encerrar Programa \n1 - Cadastrar um Clube \n2 - Realizar partida\n3 - Ler um ID do arquivo\n4 - Realizar Atualização de um Registro\n5 - Realizar o Delete de um Registro\n6 - Realizar Compressão do Arquivo\n9 - Limpar todos os Arquivos");
+              "0 - Encerrar Programa \n1 - Cadastrar um Clube \n2 - Realizar partida\n3 - Ler um ID do arquivo\n4 - Realizar Atualização de um Registro\n5 - Realizar o Delete de um Registro\n6 - Realizar Compressão do Arquivo\n7 - Realizar Descompressão do Arquivo\n9 - Limpar todos os Arquivos");
 
       // Esse switch case tem 10 opcoes então foi feito com byte mas para evitar erro
       // ele confere se o numero digitado é do tipo byte com a funcao eNumero;
@@ -216,6 +216,11 @@ public class futebolprincipal {
             int entradaCp = entrada.nextInt();
             cp.compressaoLzw(entradaCp);
             break;
+
+          case 7:
+            System.out.println("Digite um numero de arquivo para descompressar !");
+            int entradaDc = entrada.nextInt();
+            cp.descompressaoLzw(entradaDc);
           case 9:
             arqcru.deletaTudo(1, 1, 1, 1, 1, 1, 1);// Método Criado para apagar todo o arquivo
             arqcru.setPrecisarOrdenar(true);

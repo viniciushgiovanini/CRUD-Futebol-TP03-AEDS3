@@ -325,7 +325,8 @@ public class compressao {
       deletaTudo(caminhodoArqLista);
       deletaTudo(caminhoArqIndice);
 
-      arqPrinci.seek(2);
+      short idInicio = arqPrinci.readShort();
+      arqCompri.writeShort(idInicio);
       byte b[] = { -7 };
       while (arqPrinci.getFilePointer() < arqPrinci.length()) {
 
@@ -380,6 +381,65 @@ public class compressao {
 
   // --------------------X-Inicio-Métodos-Principais-Descompressao-X--------------------//
 
+  private String pesquisarDicionario2(int entrada, String[] dici) {
+
+    String letra = "-1";
+
+    for (int j = 0; j < dici.length; j++) {
+
+      if (entrada == j) {
+
+        letra = dici[j];
+        j = dici.length + 10;
+
+      } else if (dici[j] == null) {
+        letra = "-1";
+      }
+
+    }
+
+    return letra;
+
+  }
+
+  private void realizarDescompressao(int[] arqComprimido) {
+
+    String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
+        "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
+        "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " ", "/", ".", "-" };
+
+    String[] compressaoDicionario = new String[dicionario.length * 3];
+    System.arraycopy(dicionario, 0, compressaoDicionario, 0, dicionario.length);
+
+    int tamanhoEntrada = arqComprimido.length;
+    int i = 0;
+    int contadorDicionario = qtdElementosString(compressaoDicionario);
+    int contadorcontadorDicionario = 1;
+    String retornoConcat = "";
+    String letraConcat = "";
+    while (i < tamanhoEntrada) {
+
+      String letraPrimaria = pesquisarDicionario2(arqComprimido[i], compressaoDicionario);
+      retornoConcat += letraPrimaria;
+      letraConcat += letraPrimaria;
+      compressaoDicionario[contadorDicionario] = letraConcat;
+
+      if (contadorcontadorDicionario == 2) {
+        letraConcat = "";
+        contadorcontadorDicionario = 1;
+        contadorDicionario++;
+
+      }
+
+      contadorcontadorDicionario++;
+      i++;
+    }
+    System.out.println("A");
+    System.out.println("B");
+    System.out.println("C");
+
+  }
+
   public void descompressaoLzw(int entrada) {
 
     // tamanhoArq+id+lapide+boolean(SETIVERBA)+byte-10(correspondenteaofinaldoarray),
@@ -397,8 +457,8 @@ public class compressao {
       String caminhoArqIndice = "src/database/compressão/IndiceCompressao" + entrada + ".db";
       arqPrinci = new RandomAccessFile("src/database/futebol.db", "r");
       arqCompri = new RandomAccessFile(caminhodoArqCompri, "rw");
-      listaPrinci = new RandomAccessFile("src/database/aindices.db", "rw");
-      indicePrinci = new RandomAccessFile("src/database/listainvertida.db", "rw");
+      listaPrinci = new RandomAccessFile("src/database/listainvertida.db", "rw");
+      indicePrinci = new RandomAccessFile("src/database/aindices.db", "rw");
 
       byte[] pegarLista = Files.readAllBytes(Paths.get(caminhodoArqLista));
       byte[] pegarIndice = Files.readAllBytes(Paths.get(caminhoArqIndice));
@@ -406,6 +466,108 @@ public class compressao {
       deletaTudo("src/database/listainvertida.db");
       listaPrinci.write(pegarLista);
       indicePrinci.write(pegarIndice);
+
+      // comecando a descompactar o arquivo futebolprincipal
+
+      short idInicio = arqCompri.readShort();
+
+      while (arqCompri.getFilePointer() < arqCompri.length()) {
+
+        int tamanhoRegistro = arqCompri.readInt();
+        short iD = arqCompri.readShort();
+        String lapide = arqCompri.readUTF();
+        boolean verificadorByte = arqCompri.readBoolean();
+        String nome;
+
+        if (verificadorByte) {
+          int n[];
+          byte nB = 0;
+          int nTeste[] = new int[500];
+          inicializarVetor(nTeste);
+          int contadornTeste = 0;
+          while (nB != -10) {
+            nB = arqCompri.readByte();
+            if (nB != -10) {
+              nTeste[contadornTeste] = nB;
+              contadornTeste++;
+            }
+
+          }
+
+          int qtdElementosNTeste = qtdElementosInt(nTeste);
+
+          n = new int[qtdElementosNTeste];
+
+          System.arraycopy(nTeste, 0, n, 0, qtdElementosNTeste);
+          // mandar o array para o descompactar.
+          realizarDescompressao(n);// -------------------------------------Parece estar funcionando fazer o teste e
+                                   // acabar o save da descompressao
+        } else {
+          nome = arqCompri.readUTF();
+        }
+
+        verificadorByte = arqCompri.readBoolean();
+        String cnpj;
+        if (verificadorByte) {
+
+          int cn[];
+          byte nB = 0;
+          int nTeste[] = new int[500];
+          inicializarVetor(nTeste);
+          int contadornTeste = 0;
+          while (nB != -10) {
+            nB = arqCompri.readByte();
+            if (nB != -10) {
+              nTeste[contadornTeste] = nB;
+              contadornTeste++;
+            }
+
+          }
+
+          int qtdElementosNTeste = qtdElementosInt(nTeste);
+
+          cn = new int[qtdElementosNTeste];
+
+          System.arraycopy(nTeste, 0, cn, 0, qtdElementosNTeste);
+          // mandar o array para o descompactar.
+        } else {
+          cnpj = arqCompri.readLine();
+        }
+
+        verificadorByte = arqCompri.readBoolean();
+        String cidade;
+        if (verificadorByte) {
+          int city[];
+          byte nB = 0;
+          int nTeste[] = new int[500];
+          inicializarVetor(nTeste);
+          int contadornTeste = 0;
+          while (nB != -10) {
+            nB = arqCompri.readByte();
+            if (nB != -10) {
+              nTeste[contadornTeste] = nB;
+              contadornTeste++;
+            }
+
+          }
+
+          int qtdElementosNTeste = qtdElementosInt(nTeste);
+
+          city = new int[qtdElementosNTeste];
+
+          System.arraycopy(nTeste, 0, city, 0, qtdElementosNTeste);
+
+          // mandar o array para o descompactar.
+        } else {
+          cidade = arqCompri.readLine();
+        }
+
+        byte pJ = arqCompri.readByte();
+        byte pts = arqCompri.readByte();
+
+        // fazer o tobyteArray2;
+
+      }
 
       arqPrinci.close();
       arqCompri.close();
