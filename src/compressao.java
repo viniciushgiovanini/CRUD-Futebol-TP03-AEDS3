@@ -105,8 +105,9 @@ public class compressao {
   // --------------------X-Inicio-Métodos-Principais-Compressao-X--------------------//
   private int[] realizarCompressao(String entrada) {
 
-    String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
-        "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
+    String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+        "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç",
+        "Ã", "Á", "Â",
         "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " ", "/", ".", "-" };
 
     String[] compressaoDicionario = new String[dicionario.length * 3];
@@ -255,9 +256,9 @@ public class compressao {
     }
 
     if (saveCnpjArray) {
-      dos.writeBoolean(saveCnpjArray);
+
       ba = deIntParaByteArray(cnpjArray);
-      dos.writeShort(ba.length);
+      dos.writeBoolean(saveCnpjArray);
       dos.write(ba);
       dos.writeByte(-10);
     } else {
@@ -266,8 +267,9 @@ public class compressao {
     }
 
     if (saveCidadeArray) {
-      dos.writeBoolean(saveCidadeArray);
+
       ba = deIntParaByteArray(cidadeArray);
+      dos.writeBoolean(saveCidadeArray);
       dos.write(ba);
       dos.writeByte(-10);
     } else {
@@ -402,11 +404,11 @@ public class compressao {
 
   }
 
-  private void realizarDescompressao(int[] arqComprimido) {
+  private String realizarDescompressao(int[] arqComprimido) {
 
-    String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
-        "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
-        "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " ", "/", ".", "-" };
+    String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O",
+        "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç",
+        "Ã", "Á", "Â", "É", "Ê", "Í", "Î", "Ó", "Õ", "Ô", "Ú", "Û", " ", "/", ".", "-" };
 
     String[] compressaoDicionario = new String[dicionario.length * 3];
     System.arraycopy(dicionario, 0, compressaoDicionario, 0, dicionario.length);
@@ -414,29 +416,95 @@ public class compressao {
     int tamanhoEntrada = arqComprimido.length;
     int i = 0;
     int contadorDicionario = qtdElementosString(compressaoDicionario);
-    int contadorcontadorDicionario = 1;
+    int contadorLoop = 1;
     String retornoConcat = "";
     String letraConcat = "";
+    boolean travaLimparVetor = false;
     while (i < tamanhoEntrada) {
-
+      boolean trava = false;
       String letraPrimaria = pesquisarDicionario2(arqComprimido[i], compressaoDicionario);
-      retornoConcat += letraPrimaria;
-      letraConcat += letraPrimaria;
-      compressaoDicionario[contadorDicionario] = letraConcat;
+      if (letraPrimaria.contains("?")) {
+        String interoRetirada = "";
+        for (int j = 0; j < letraPrimaria.length() - 1; j++) {
+          char letra = letraPrimaria.charAt(j);
+          interoRetirada += letra;
+        }
+        retornoConcat += interoRetirada;
+        retornoConcat += interoRetirada;
+        letraConcat = interoRetirada;
+      } else {
+        retornoConcat += letraPrimaria;
+        letraConcat = letraPrimaria;
+      }
 
-      if (contadorcontadorDicionario == 2) {
-        letraConcat = "";
-        contadorcontadorDicionario = 1;
+      int podeAdicionarNoDici = pesquisarNoDicionario(letraConcat, compressaoDicionario);
+
+      if (podeAdicionarNoDici >= 53) {
+
+        char letraMaior = letraConcat.charAt(0);
+        String letraMaiorConvert = "";
+        letraMaiorConvert += letraMaior;
+
+        String tirarIntero = compressaoDicionario[contadorDicionario];
+        String interoRetirada = "";
+        for (int j = 0; j < tirarIntero.length() - 1; j++) {
+          char letra = tirarIntero.charAt(j);
+          interoRetirada += letra;
+        }
+        String letraConcat2 = interoRetirada + letraMaiorConvert;
+        contadorLoop = 1;
+
+        compressaoDicionario[contadorDicionario] = "";
+        compressaoDicionario[contadorDicionario] += letraConcat2;
         contadorDicionario++;
+        if (i < tamanhoEntrada - 1) {
+          compressaoDicionario[contadorDicionario] = "";
+          compressaoDicionario[contadorDicionario] += letraConcat + "?";
+        }
+        letraConcat = "";
+
+        trava = true;
 
       }
 
-      contadorcontadorDicionario++;
+      if (!travaLimparVetor) {
+        compressaoDicionario[contadorDicionario] = "";
+        travaLimparVetor = true;
+      }
+      if (contadorLoop == 1 && !trava) {
+        if (i < tamanhoEntrada - 1) {
+          compressaoDicionario[contadorDicionario] += letraConcat + "?";
+        }
+      }
+
+      if (contadorLoop == 2) {
+
+        String tirarIntero = compressaoDicionario[contadorDicionario];
+        String interoRetirada = "";
+        for (int j = 0; j < tirarIntero.length() - 1; j++) {
+          char letra = tirarIntero.charAt(j);
+          interoRetirada += letra;
+        }
+        String letraConcat2 = interoRetirada + letraConcat;
+        contadorLoop = 1;
+
+        compressaoDicionario[contadorDicionario] = "";
+        compressaoDicionario[contadorDicionario] += letraConcat2;
+        contadorDicionario++;
+        if (i < tamanhoEntrada - 1) {
+          compressaoDicionario[contadorDicionario] = "";
+          compressaoDicionario[contadorDicionario] += letraConcat + "?";
+        }
+        letraConcat = "";
+
+      } else {
+        letraConcat = "";
+      }
+      contadorLoop++;
       i++;
     }
-    System.out.println("A");
-    System.out.println("B");
-    System.out.println("C");
+
+    return retornoConcat;
 
   }
 
@@ -500,8 +568,9 @@ public class compressao {
 
           System.arraycopy(nTeste, 0, n, 0, qtdElementosNTeste);
           // mandar o array para o descompactar.
-          realizarDescompressao(n);// -------------------------------------Parece estar funcionando fazer o teste e
-                                   // acabar o save da descompressao
+          nome = realizarDescompressao(n);// -------------------------------------Parece estar funcionando fazer o teste
+                                          // e
+          // acabar o save da descompressao
         } else {
           nome = arqCompri.readUTF();
         }
@@ -530,6 +599,9 @@ public class compressao {
 
           System.arraycopy(nTeste, 0, cn, 0, qtdElementosNTeste);
           // mandar o array para o descompactar.
+
+          cnpj = realizarDescompressao(cn);
+
         } else {
           cnpj = arqCompri.readLine();
         }
@@ -558,6 +630,7 @@ public class compressao {
           System.arraycopy(nTeste, 0, city, 0, qtdElementosNTeste);
 
           // mandar o array para o descompactar.
+          cidade = realizarDescompressao(city);
         } else {
           cidade = arqCompri.readLine();
         }

@@ -2,9 +2,10 @@
 
 - Essa é a branch **PRINCIPAL**
 
-## Melhorias Versão [0.6.1]
+## Melhorias Versão [0.6.2]
  
-- Descompressão, já foi feito o método para descompressar os campos comprimidos implementado e testado com nome, falta agora testar com cnpj e com a cidade e implementar aos mesmos.
+- Descompressão, o método realizar compressão foi desbugado, pois ele estava imprimindo 12.123.123/00?1-48 então foi feito uma alteração para evitar esse pequeno bug.   
+- Fazer o array de byte e salvar no arquivo futebol Principal.  
 ## Próxima melhoria (Problemas) 
  
 - Criar o método de descriptografia.  
