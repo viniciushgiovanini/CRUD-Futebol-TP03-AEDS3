@@ -2,14 +2,13 @@
 
 - Essa é a branch **PRINCIPAL**
 
-## Melhorias Versão [0.4.2]
+## Melhorias Versão [0.5]
  
-- O método realizarCompressao está 100% nessa versão fora de todos os bugs é a versão mais atualizada dele.  
-- Agora tem que fazer salvar os dados no arquivo comprimido, estava utilizando a classe indice para aproveitar o tobytearray, porém não pode salvar os campos comprimidos como string, tem que salvar como byte, tendo que fazer um novo tobytearray na classe compressao.  
+- Compressão feita, falta agora calcular a taxa de compressao somente.  
+- Proximo passo é fazer a descompressao.  
 ## Próxima melhoria (Problemas) 
-- Criar o tobytearray do compressor.  
-- Salvar o array de bytecomprimido no arquivo
-- salvarAlistaEoIndicenoarquivoComprimido.    
+ 
+- Criar taxa de compressao.      
 - Criar o método de descriptografia.  
 ## Próximos Passos
  

@@ -1,8 +1,8 @@
-import java.io.RandomAccessFile;
+import java.io.*;
 
 public class compressao {
 
-  private int qtdElementos(String[] a) {
+  private int qtdElementosString(String[] a) {
 
     int contador = 0;
 
@@ -16,6 +16,18 @@ public class compressao {
 
     }
 
+    return contador;
+  }
+
+  private int qtdElementosInt(int[] a) {
+    int contador = 0;
+    for (int i = 0; i < a.length; i++) {
+
+      if (a[i] != -1) {
+        contador++;
+      }
+
+    }
     return contador;
   }
 
@@ -39,7 +51,28 @@ public class compressao {
 
   }
 
-  private String realizarCompressao(String entrada) {
+  private int[] inicializarVetor(int[] s) {
+
+    for (int i = 0; i < s.length; i++) {
+
+      s[i] = -1;
+
+    }
+
+    return s;
+  }
+
+  private boolean vetorEstaVazio(int[] s) {
+
+    boolean teste = false;
+
+    if (s[0] == -1) {
+      teste = true;
+    }
+    return teste;
+  }
+
+  private int[] realizarCompressao(String entrada) {
 
     String[] dicionario = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
         "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Ç", "Ã", "Á", "Â",
@@ -47,7 +80,9 @@ public class compressao {
 
     String[] compressaoDicionario = new String[dicionario.length * 3];
     System.arraycopy(dicionario, 0, compressaoDicionario, 0, dicionario.length);
-    String valorCompressao = "";
+    int[] valorCompressao = new int[500];
+    valorCompressao = inicializarVetor(valorCompressao);
+    int contadorValorCompressao = 0;
     String letraS = "";
     String proxLetra = "";
     String letraParaSalvarnoDic = "";
@@ -109,11 +144,13 @@ public class compressao {
         }
 
         if (saveValorRetorno != -1) {
-          valorCompressao += saveValorRetorno;
+
+          valorCompressao[contadorValorCompressao] = saveValorRetorno;
+          contadorValorCompressao++;
 
         }
 
-        int posicaoNoDicionario = qtdElementos(compressaoDicionario);
+        int posicaoNoDicionario = qtdElementosString(compressaoDicionario);
         if (!(letraParaSalvarnoDic.equals(""))) {
           compressaoDicionario[posicaoNoDicionario] = letraParaSalvarnoDic;
         }
@@ -123,11 +160,98 @@ public class compressao {
         letraParaSalvarnoDic = "";
       } else {
         podeEncerrar = true;
-        valorCompressao = "";
+        valorCompressao = inicializarVetor(valorCompressao);
       }
 
     }
-    return valorCompressao;
+
+    int[] vRetorno = { -1 };
+
+    if (!vetorEstaVazio(valorCompressao)) {
+
+      int qtdElementos = qtdElementosInt(valorCompressao);
+      vRetorno = new int[qtdElementos];
+
+      System.arraycopy(valorCompressao, 0, vRetorno, 0, qtdElementos);
+
+    }
+
+    return vRetorno;
+  }
+
+  private byte[] deIntParaByteArray(int[] s) {
+
+    byte[] a = new byte[s.length];
+
+    for (int i = 0; i < s.length; i++) {
+
+      a[i] = (byte) s[i];
+
+    }
+    return a;
+  }
+
+  private byte[] toByteArray(short iD, String lapide, String nome, String cnpj,
+      String cidade, byte pj, byte pts, int[] nomeArray, int[] cnpjArray, int[] cidadeArray) throws IOException {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    DataOutputStream dos = new DataOutputStream(baos);
+
+    // como ta escrevendo a compressao tamanhodoarquivodedados+id,lapide,boolean se
+    // for true o nome é um int, se for false é string, nome, boolean verificador
+    // pra cnpj, cnpj, boolean verificador cidade, cidade, pj e pontos
+
+    fut ft = new fut();
+
+    byte[] ba;
+    boolean saveNomeArray = false;
+    boolean saveCnpjArray = false;
+    boolean saveCidadeArray = false;
+
+    if (!vetorEstaVazio(nomeArray)) {
+      saveNomeArray = true;
+    }
+    boolean podeSetarCnpj = ft.verificaCPNJ(cnpj);
+
+    if (!vetorEstaVazio(cnpjArray) && podeSetarCnpj) {
+      saveCnpjArray = true;
+    }
+
+    if (!vetorEstaVazio(cidadeArray)) {
+      saveCidadeArray = true;
+    }
+
+    dos.writeShort(iD);
+    dos.writeUTF(lapide);
+    if (saveNomeArray) {
+      ba = deIntParaByteArray(nomeArray);
+      dos.writeBoolean(saveNomeArray);
+      dos.write(ba);
+    } else {
+      dos.writeBoolean(saveNomeArray);
+      dos.writeUTF(nome);
+    }
+
+    if (saveCnpjArray) {
+      dos.writeBoolean(saveCnpjArray);
+      ba = deIntParaByteArray(cnpjArray);
+      dos.write(ba);
+    } else {
+      dos.writeBoolean(saveCnpjArray);
+      dos.writeUTF("");
+    }
+
+    if (saveCidadeArray) {
+      dos.writeBoolean(saveCidadeArray);
+      ba = deIntParaByteArray(cidadeArray);
+      dos.write(ba);
+    } else {
+      dos.writeBoolean(saveCidadeArray);
+      dos.writeUTF(cidade);
+    }
+
+    dos.writeByte(pj);
+    dos.writeByte(pts);
+    return baos.toByteArray();
   }
 
   public void compressaoLzw(int entrada) {
@@ -140,7 +264,6 @@ public class compressao {
 
     RandomAccessFile arqPrinci;
     RandomAccessFile arqCompri;
-    fut ft = new fut();
 
     try {
       String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada + ".db";
@@ -163,46 +286,27 @@ public class compressao {
         // indice, pois se não vai salvar com tipo primitivo, tem que fazer um novo
         // tobyteArray fazer dia 10/06
 
-        ft.setIdClube(arqPrinci.readShort());
-        ft.setLapide(arqPrinci.readUTF());
+        Short iDclube = arqPrinci.readShort();
+        String lapide = arqPrinci.readUTF();
         String ftNome = arqPrinci.readUTF().toUpperCase();
         String ftCnpj = arqPrinci.readUTF().toUpperCase();
         String ftCidade = arqPrinci.readUTF().toUpperCase();
-        String receberByteComprimidoNome = realizarCompressao(ftNome);
-        String receberByteComprimidoCnpj = realizarCompressao(ftCnpj);
-        String receberByteComprimidoCidade = realizarCompressao(ftCidade);
+        int[] receberByteComprimidoNome = realizarCompressao(ftNome);
+        int[] receberByteComprimidoCnpj = realizarCompressao(ftCnpj);
+        int[] receberByteComprimidoCidade = realizarCompressao(ftCidade);
 
-        if (!(receberByteComprimidoNome.equals(""))) {
-          ft.setNome(receberByteComprimidoNome);
-        } else {
-          ft.setNome(ftNome);
-        }
-
-        boolean podeSetarCnpj = ft.verificaCPNJ(ftCnpj);
-
-        if (!(receberByteComprimidoCnpj.equals("")) && podeSetarCnpj) {
-          // ft.setCnpjComprimido(receberByteComprimidoCnpj);
-        } else if (podeSetarCnpj) {
-
-          // ft.setCnpj(ftCnpj);
-
-        }
-
-        if (!(receberByteComprimidoCidade.equals(""))) {
-          ft.setCidade(receberByteComprimidoCidade);
-        } else {
-          ft.setCidade(ftCidade);
-        }
-
-        ft.setPartidasJogadas(arqPrinci.readByte());
-        ft.setPontos(arqPrinci.readByte());
+        byte partidasJogadas = arqPrinci.readByte();
+        byte pontos = arqPrinci.readByte();
 
         byte b[];
 
-        b = ft.toByteArray();
+        b = toByteArray(iDclube, lapide, ftNome, ftCnpj, ftCidade, partidasJogadas, pontos,
+            receberByteComprimidoNome, receberByteComprimidoCnpj, receberByteComprimidoCidade);
 
-        arqCompri.write(tamanhodoArquivo4bytesI);
-        arqCompri.write(b);
+        // fazer metodo para calcular taxa de compressao
+
+        arqCompri.writeInt(tamanhodoArquivo4bytesI);
+        arqCompri.write(b);// criar o tobytearray
 
       }
 
