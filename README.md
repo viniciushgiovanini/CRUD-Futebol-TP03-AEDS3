@@ -15,7 +15,7 @@
 ✅ Arrumar Update com Indice  
 ✅ Compressão de Dados: LZW    
 ✅ Criptografia: Escolher (Cifra de Vigenére)   
-⬜️ Documentação     
+✅ Documentação     
 
 ## Linguagem de Desenvolvimento
 
