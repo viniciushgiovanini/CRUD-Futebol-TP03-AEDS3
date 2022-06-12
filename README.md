@@ -13,7 +13,7 @@
 
 ## Etapas
 ✅ Arrumar Update com Indice  
-⬜️ Compressão de Dados: LZW    
+✅ Compressão de Dados: LZW    
 ✅ Criptografia: Escolher (Cifra de Vigenére)   
 ⬜️ Documentação     
 

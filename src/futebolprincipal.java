@@ -221,13 +221,13 @@ public class futebolprincipal {
             System.out.println("Digite um numero de arquivo para descompressar !");
             int entradaDc = entrada.nextInt();
             cp.descompressaoLzw(entradaDc);
+            break;
           case 9:
             arqcru.deletaTudo(1, 1, 1, 1, 1, 1, 1);// Método Criado para apagar todo o arquivo
             arqcru.setPrecisarOrdenar(true);
             arqcru.salvarPrecisaOrdernar(1);
             ic.setPodeRandomico(true);
             ic.atualizarPodeRandomico(1);
-
             break;
 
           default:

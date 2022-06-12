@@ -38,6 +38,12 @@ public class criptografia {
 
   }
 
+  // --------------------------------------
+  // O método criarTabelanoArquivodeDados cria a tabela Vigenere, na pasta
+  // criptografia existe o arquivo tabeladeCriptografia.db e la está contida a
+  // tabela
+  // --------------------------------------
+
   private void criarTabelanoArquivodeDados() {
 
     char letraIndice = 'A';
@@ -64,6 +70,11 @@ public class criptografia {
     }
 
   }
+
+  // --------------------------------------
+  // O método regularTamanhodaChave pega a string a ser criptografada e coloca a
+  // chave que por padrão é AEDS no tamanho da string
+  // --------------------------------------
 
   private String regularTamanhodaChave(String preRegular, int tamMenor, int op) {
 
@@ -106,6 +117,10 @@ public class criptografia {
 
   }
 
+  // --------------------------------------
+  // O método retornarPosicaodaLetranoAlfabeto pesquisa no alfabeto que é um array
+  // a posicao do letra desejada
+  // --------------------------------------
   private int retornarPosicaodaLetranoAlfabeto(char letra) {
     char alfabeto[] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
         'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -124,6 +139,10 @@ public class criptografia {
     return valorRetorno;
   }
 
+  // --------------------------------------
+  // O método retornarLetranaTabelaVigenere pega uma determinada letra e retorna
+  // sua correspondente na tabela
+  // --------------------------------------
   private char retornarLetranaTabelaVigenere(char letra, int posi) {
     char letraRetorno = '-';
 
@@ -159,6 +178,11 @@ public class criptografia {
     }
     return letraRetorno;
   }
+
+  // --------------------------------------
+  // O método critografar ele é o principal da criptografia, ele é o que é chamada
+  // e de la se chama os métodos de apoio
+  // --------------------------------------
 
   public String criptografar(String entrada) {
 
@@ -223,6 +247,11 @@ public class criptografia {
     return criptografada;
   }
 
+  // --------------------------------------
+  // O método retornarLetraDescriptografada realiaza o processo inverso do
+  // retornar letra, pois ele pega a letra gerada do retornarLetranaTabelaVigenere
+  // e retorna a letra que foi passada como parametro
+  // --------------------------------------
   private char retornarLetraDescriptografada(char letra, int posiChave) {
     char letraRetorno = ' ';
     posiChave += 2;
@@ -257,6 +286,10 @@ public class criptografia {
     return letraRetorno;
   }
 
+  // --------------------------------------
+  // O método descritografar realiza a busca das letra na tabela de maneira que
+  // retorne a letra que foi passada como parametro na criptografia
+  // --------------------------------------
   public String descriptografar(String entrada) {
     String Descriptografada = "";
     entrada = entrada.toUpperCase();

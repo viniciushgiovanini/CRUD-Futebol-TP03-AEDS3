@@ -2,18 +2,15 @@
 
 - Essa é a branch **PRINCIPAL**
 
-## Melhorias Versão [0.6.2]
+## Melhorias Versão [0.7.0]
  
-- Descompressão, o método realizar compressão foi desbugado, pois ele estava imprimindo 12.123.123/00?1-48 então foi feito uma alteração para evitar esse pequeno bug.   
-- Fazer o array de byte e salvar no arquivo futebol Principal.  
+- Descompressao realizada, 100% funcional e carregando a lista invertida e o arquivo de indice que foram salvos na compressao.  
+- Codigo comentado.  
 ## Próxima melhoria (Problemas) 
  
-- Criar o método de descriptografia.  
 ## Próximos Passos
  
-- Criar o LZW (compressão e descompressão) 
-  - Comprimir  
-  - Descomprimir   
+- Parte de codigo finalizada. gg     
 
 
 
