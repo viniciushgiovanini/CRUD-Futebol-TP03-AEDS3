@@ -65,7 +65,10 @@ public class listainvertida {
 
           criptografia crip = new criptografia();
 
-          nome = crip.descriptografar(nome);// faz a descriptografia na lista
+          if (!nome.contains(" ")) {
+            nome = crip.descriptografar(nome);// faz a descriptografia na lista
+          }
+
           nome = ft.tratarNome(nome);// trata o nome para que seja lido independente do case
           ft.setNome(nome);
 

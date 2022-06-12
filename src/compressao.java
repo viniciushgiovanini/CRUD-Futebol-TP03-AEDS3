@@ -366,34 +366,65 @@ public class compressao {
       deletaTudo(caminhodoArqCompri);
       deletaTudo(caminhodoArqLista);
       deletaTudo(caminhoArqIndice);
+      Short iDclube = -1;
+      String lapide = "";
+      String ftNome = "";
+      String ftCnpj = "";
+      String ftCidade = "";
+      int[] receberByteComprimidoNome = { -1 };
+      int[] receberByteComprimidoCnpj = { -1 };
+      int[] receberByteComprimidoCidade = { -1 };
+
+      byte[] pegarLista = Files.readAllBytes(Paths.get("src/database/listainvertida.db"));
+      byte[] pegarIndice = Files.readAllBytes(Paths.get("src/database/aindices.db"));
+
+      arqLista.write(pegarLista);
+      arqIndice.write(pegarIndice);
+
+      int totalDeRegistros = (int) arqIndice.length() / 13;
 
       if (arqPrinci.length() != 0) {
-
+        int contador = 0;
         short idInicio = arqPrinci.readShort();
         arqCompri.writeShort(idInicio);
         byte b[] = { -7 };
-        while (arqPrinci.getFilePointer() < arqPrinci.length()) {
+
+        while ((contador < totalDeRegistros) && arqPrinci.getFilePointer() < arqPrinci.length()) {
 
           // Os sets tem que salvar em byte e nao em string entao nao poe usar a classa
           // indice, pois se não vai salvar com tipo primitivo, tem que fazer um novo
           // tobyteArray fazer dia 10/06
+
           int tamanhodoRegistro = arqPrinci.readInt();// apagar essa variavel depois pois ela é descessaria
-          Short iDclube = arqPrinci.readShort();
-          String lapide = arqPrinci.readUTF();
-          String ftNome = arqPrinci.readUTF().toUpperCase();
-          String ftCnpj = arqPrinci.readUTF().toUpperCase();
-          String ftCidade = arqPrinci.readUTF().toUpperCase();
-          int[] receberByteComprimidoNome = realizarCompressao(ftNome);
-          int[] receberByteComprimidoCnpj = realizarCompressao(ftCnpj);
-          int[] receberByteComprimidoCidade = realizarCompressao(ftCidade);
+          long savePosi = arqPrinci.getFilePointer();
 
-          byte partidasJogadas = arqPrinci.readByte();
-          byte pontos = arqPrinci.readByte();
+          arqPrinci.seek(arqPrinci.getFilePointer() + 2);
+          String testeLapide = arqPrinci.readUTF();
 
-          b = toByteArray(iDclube, lapide, ftNome, ftCnpj, ftCidade, partidasJogadas, pontos,
-              receberByteComprimidoNome, receberByteComprimidoCnpj, receberByteComprimidoCidade);
-          arqCompri.writeInt(tamanhodoRegistro);
-          arqCompri.write(b);// criar o tobytearray
+          if (testeLapide.equals(" ")) {
+            arqPrinci.seek(savePosi);
+            iDclube = arqPrinci.readShort();
+            lapide = arqPrinci.readUTF();
+            ftNome = arqPrinci.readUTF().toUpperCase();
+            ftCnpj = arqPrinci.readUTF().toUpperCase();
+            ftCidade = arqPrinci.readUTF().toUpperCase();
+            receberByteComprimidoNome = realizarCompressao(ftNome);
+            receberByteComprimidoCnpj = realizarCompressao(ftCnpj);
+            receberByteComprimidoCidade = realizarCompressao(ftCidade);
+
+            byte partidasJogadas = arqPrinci.readByte();
+            byte pontos = arqPrinci.readByte();
+
+            b = toByteArray(iDclube, lapide, ftNome, ftCnpj, ftCidade, partidasJogadas, pontos,
+                receberByteComprimidoNome, receberByteComprimidoCnpj, receberByteComprimidoCidade);
+            arqCompri.writeInt(tamanhodoRegistro);
+            arqCompri.write(b);// criar o tobytearray
+
+          } else {
+            arqPrinci.seek(savePosi);
+            arqPrinci.seek(arqPrinci.getFilePointer() + tamanhodoRegistro);
+          }
+          contador++;
         }
         // fazer metodo para calcular taxa de compressao
         int taxaCompre = porcentagemDeCompressao(arqCompri.length(), arqPrinci.length());
@@ -406,11 +437,6 @@ public class compressao {
           System.out.println("A compressao resultou numa piora no tamanho do arquivo original NESTE CASO !");
         }
 
-        byte[] pegarLista = Files.readAllBytes(Paths.get("src/database/listainvertida.db"));
-        byte[] pegarIndice = Files.readAllBytes(Paths.get("src/database/aindices.db"));
-
-        arqLista.write(pegarLista);
-        arqIndice.write(pegarIndice);
       } else {
         System.out
             .println("Error: Arquivo Principal não pode ser compactado pois ele esta vazio, registre algum time !");
@@ -593,7 +619,7 @@ public class compressao {
     RandomAccessFile arqCompri;
     RandomAccessFile listaPrinci;
     RandomAccessFile indicePrinci;
-
+    ordenacaoexterna oe = new ordenacaoexterna();
     try {
 
       String caminhodoArqCompri = "src/database/compressão/futebolCompressao" + entrada + ".db";
@@ -612,6 +638,7 @@ public class compressao {
         deletaTudo("src/database/listainvertida.db");
         listaPrinci.write(pegarLista);
         indicePrinci.write(pegarIndice);
+        oe.ordenacaoDistribuicao();
 
         // comecando a descompactar o arquivo futebolprincipal
 

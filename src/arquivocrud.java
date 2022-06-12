@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 public class arquivocrud {
 
   private boolean precisaOrdernar = false;
+  Scanner sc = new Scanner(System.in);
 
   public boolean getPrecisaOrdernar() {
     return precisaOrdernar;
@@ -193,10 +194,9 @@ public class arquivocrud {
       li.escreverListaInvertida(ft.getNome());
 
       if (!(ft.getCidade().equals(""))) {
-        String cidadeCripto = ft.getCidade();
-        cidadeCripto = crip.criptografar(cidadeCripto);
-        li.setNomeLista(cidadeCripto);
-        li.escreverListaInvertida(cidadeCripto);
+        String cidadeString = ft.getCidade();
+        li.setNomeLista(cidadeString);
+        li.escreverListaInvertida(cidadeString);
       }
 
     } catch (Exception e) {
@@ -556,25 +556,43 @@ public class arquivocrud {
 
       if (metodo != 5 && metodo != 4) {
 
-        String mandarTextoCripto = crip.criptografar(recebendo);
+        System.out.println("Voce está pesquisando um Clube ou uma Cidade ?");
+        String pergunta = sc.nextLine();
+        String mandarTexto = "";
+        pergunta = ft2.tratarNome(pergunta);
+        boolean marcador = true;
+        if (pergunta.equals("Clube")) {
+          mandarTexto = crip.criptografar(recebendo);
 
-        listainvertida li = new listainvertida();
-
-        retornoPesquisa = li.pesquisaListaInvertida(mandarTextoCripto, true);
-
-        // if (retornoPesquisa == -1) {
-        // retornoPesquisa = li.pesquisaListaInvertida(ft2.tratarNome(recebendo), true);
-        // }
-
-        if (retornoPesquisa == -1) {
-
-          System.out.println("\nRegistro Pesquisado não encontrado !\n");
-
+        } else if (pergunta.equals("Cidade")) {
+          mandarTexto = recebendo;
+          mandarTexto = ft2.tratarNome(mandarTexto);
+        } else {
+          System.out.println("Não entendi, pesquise novamente e insira Clube ou Cidade !");
+          marcador = false;
         }
-      } else {
-        System.out
-            .println(
-                "Não pode deletar ou atualizar um Registro a partir do seu nome, tem que deletar a partir do seu ID !!!\n");
+
+        if (marcador) {
+
+          listainvertida li = new listainvertida();
+
+          retornoPesquisa = li.pesquisaListaInvertida(mandarTexto, true);
+
+          // if (retornoPesquisa == -1) {
+          // retornoPesquisa = li.pesquisaListaInvertida(ft2.tratarNome(recebendo), true);
+          // }
+
+          if (retornoPesquisa == -1) {
+
+            System.out.println("\nRegistro Pesquisado não encontrado !\n");
+
+          }
+        } else {
+          System.out
+              .println(
+                  "Não pode deletar ou atualizar um Registro a partir do seu nome, tem que deletar a partir do seu ID !!!\n");
+        }
+
       }
 
     }
@@ -1025,4 +1043,5 @@ public class arquivocrud {
     return true;
   }
   // -----------------------UPDATE - FINAL---------------------------------//
+
 }
