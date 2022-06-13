@@ -9,7 +9,7 @@
 
 - A documentação de instruções pode ser encontrada [AQUI](https://github.com/viniciushgiovanini/CRUD-Futebol-TP03-AEDS3/blob/main/doc/Trabalho%20Prático%20III.pdf)
 
-- A documentação feita desse código pode ser encontrada [AQUI]()
+- A documentação feita desse código pode ser encontrada [AQUI](https://github.com/viniciushgiovanini/CRUD-Futebol-TP03-AEDS3/blob/main/doc/Documentação___Trabalho_Prático_3_Algoritmos_e_Estrutura_de_Dados_3.pdf)
 
 ## Etapas
 ✅ Arrumar Update com Indice  
